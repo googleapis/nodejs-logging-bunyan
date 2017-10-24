@@ -44,25 +44,31 @@
   ],
   "scripts": {
     "publish-module": "node ../../scripts/publish.js logging-bunyan",
-    "test": "mocha test/*.js",
     "system-test": "mocha system-test/*.js --no-timeouts --bail",
     "generate-scaffolding": "repo-tools generate all",
     "lint": "repo-tools lint --cmd eslint -- src/ system-test/ test/",
-    "prettier": "prettier --write src/*.js src/*/*.js test/*.js test/*/*.js system-test/*.js system-test/*/*.js"
+    "prettier": "prettier --write src/*.js src/*/*.js test/*.js test/*/*.js system-test/*.js system-test/*/*.js",
+    "cover": "nyc --reporter=lcov mocha --require intelli-espower-loader test/*.js && nyc report",
+    "test-no-cover": "repo-tools test run --cmd mocha -- test/*.js --no-timeouts",
+    "test": "repo-tools test run --cmd npm -- run cover"
   },
   "dependencies": {
-    "@google-cloud/logging": "^1.0.0",
-    "extend": "^3.0.0"
+    "@google-cloud/logging": "^1.0.0"
   },
   "devDependencies": {
     "@google-cloud/nodejs-repo-tools": "^2.0.11",
+    "async": "^2.5.0",
     "bunyan": "^1.8.5",
+    "codecov": "^3.0.0",
     "eslint": "^4.9.0",
     "eslint-config-prettier": "^2.6.0",
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-prettier": "^2.3.1",
-    "extend": "^3.0.0",
-    "mocha": "^3.2.0",
+    "extend": "^3.0.1",
+    "intelli-espower-loader": "^1.0.1",
+    "mocha": "^3.5.3",
+    "nyc": "^11.2.1",
+    "power-assert": "^1.4.4",
     "prettier": "^1.7.4",
     "proxyquire": "^1.7.11"
   }
