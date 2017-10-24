@@ -1,8 +1,13 @@
 {
   "name": "@google-cloud/logging-bunyan",
-  "version": "0.6.0",
-  "author": "Google Inc.",
   "description": "Stackdriver Logging stream for Bunyan",
+  "version": "0.6.0",
+  "license": "Apache-2.0",
+  "author": "Google Inc.",
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "repository": "googleapis/nodejs-logging-bunyan",
   "main": "./src/index.js",
   "files": [
     "src",
@@ -10,7 +15,6 @@
     "CONTRIBUTORS",
     "LICENSE"
   ],
-  "repository": "googlecloudplatform/google-cloud-node",
   "keywords": [
     "google apis client",
     "google api client",
@@ -27,6 +31,22 @@
     "bunyan stream",
     "winston"
   ],
+  "contributors": [
+    "Ali Ijaz Sheikh <ofrobots@google.com>",
+    "Dave Gramlich <callmehiphop@gmail.com>",
+    "Dave Raffensperger <daveraff@google.com>",
+    "Stephen Sawchuk <sawchuk@gmail.com>",
+    "Stephen Sawchuk <stephenplusplus@users.noreply.github.com>",
+    "Stephen Sawchuk <stephenplusplusplus@gmail.com>",
+    "Tim Swast <swast@google.com>",
+    "circle-ci <circle-ci@circleci.com>"
+  ],
+  "scripts": {
+    "publish-module": "node ../../scripts/publish.js logging-bunyan",
+    "test": "mocha test/*.js",
+    "system-test": "mocha system-test/*.js --no-timeouts --bail",
+    "generate-scaffolding": "repo-tools generate all"
+  },
   "dependencies": {
     "@google-cloud/logging": "^1.0.0",
     "extend": "^3.0.0"
@@ -36,14 +56,5 @@
     "extend": "^3.0.0",
     "mocha": "^3.2.0",
     "proxyquire": "^1.7.11"
-  },
-  "scripts": {
-    "publish-module": "node ../../scripts/publish.js logging-bunyan",
-    "test": "mocha test/*.js",
-    "system-test": "mocha system-test/*.js --no-timeouts --bail"
-  },
-  "license": "Apache-2.0",
-  "engines": {
-    "node": ">=4.0.0"
   }
 }
