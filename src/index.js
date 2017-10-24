@@ -37,7 +37,7 @@ var BUNYAN_TO_STACKDRIVER = {
   40: 'WARNING',
   30: 'INFO',
   20: 'DEBUG',
-  10: 'DEBUG'
+  10: 'DEBUG',
 };
 
 /**
@@ -104,11 +104,11 @@ function LoggingBunyan(options) {
   this.serviceContext_ = options.serviceContext;
 
   this.log_ = logging(options).log(this.logName_, {
-    removeCircular: true
+    removeCircular: true,
   });
 
   Writable.call(this, {
-    objectMode: true
+    objectMode: true,
   });
 }
 util.inherits(LoggingBunyan, Writable);
@@ -132,7 +132,7 @@ LoggingBunyan.prototype.stream = function(level) {
   return {
     level: level,
     type: 'raw',
-    stream: this
+    stream: this,
   };
 };
 
@@ -172,7 +172,7 @@ LoggingBunyan.prototype.formatEntry_ = function(record) {
   var entryMetadata = {
     resource: this.resource_,
     timestamp: record.time,
-    severity: BUNYAN_TO_STACKDRIVER[record.level]
+    severity: BUNYAN_TO_STACKDRIVER[record.level],
   };
 
   // If the record contains a httpRequest property, provide it on the entry

@@ -35,6 +35,7 @@
     "Ali Ijaz Sheikh <ofrobots@google.com>",
     "Dave Gramlich <callmehiphop@gmail.com>",
     "Dave Raffensperger <daveraff@google.com>",
+    "Michael Gao <fgao@google.com>",
     "Stephen Sawchuk <sawchuk@gmail.com>",
     "Stephen Sawchuk <stephenplusplus@users.noreply.github.com>",
     "Stephen Sawchuk <stephenplusplusplus@gmail.com>",
@@ -45,16 +46,24 @@
     "publish-module": "node ../../scripts/publish.js logging-bunyan",
     "test": "mocha test/*.js",
     "system-test": "mocha system-test/*.js --no-timeouts --bail",
-    "generate-scaffolding": "repo-tools generate all"
+    "generate-scaffolding": "repo-tools generate all",
+    "lint": "repo-tools lint --cmd eslint -- src/ system-test/ test/",
+    "prettier": "prettier --write src/*.js src/*/*.js test/*.js test/*/*.js system-test/*.js system-test/*/*.js"
   },
   "dependencies": {
     "@google-cloud/logging": "^1.0.0",
     "extend": "^3.0.0"
   },
   "devDependencies": {
+    "@google-cloud/nodejs-repo-tools": "^2.0.11",
     "bunyan": "^1.8.5",
+    "eslint": "^4.9.0",
+    "eslint-config-prettier": "^2.6.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-prettier": "^2.3.1",
     "extend": "^3.0.0",
     "mocha": "^3.2.0",
+    "prettier": "^1.7.4",
     "proxyquire": "^1.7.11"
   }
 }
