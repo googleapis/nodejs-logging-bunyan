@@ -35,6 +35,7 @@
     "Ali Ijaz Sheikh <ofrobots@google.com>",
     "Dave Gramlich <callmehiphop@gmail.com>",
     "Dave Raffensperger <daveraff@google.com>",
+    "Michael Gao <fgao@google.com>",
     "Stephen Sawchuk <sawchuk@gmail.com>",
     "Stephen Sawchuk <stephenplusplus@users.noreply.github.com>",
     "Stephen Sawchuk <stephenplusplusplus@gmail.com>",
@@ -51,15 +52,23 @@
     "test": "mocha test/*.js"
   },
   "dependencies": {
-    "@google-cloud/logging": "^1.0.0",
-    "extend": "^3.0.0"
+    "@google-cloud/logging": "^1.0.0"
   },
   "devDependencies": {
+    "@google-cloud/nodejs-repo-tools": "^2.0.11",
+    "async": "^2.5.0",
     "bunyan": "^1.8.5",
-    "extend": "^3.0.0",
-    "ink-docstrap": "^1.3.0",
-    "jsdoc": "^3.5.5",
-    "mocha": "^3.2.0",
+    "codecov": "^3.0.0",
+    "eslint": "^4.9.0",
+    "eslint-config-prettier": "^2.6.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-prettier": "^2.3.1",
+    "extend": "^3.0.1",
+    "intelli-espower-loader": "^1.0.1",
+    "mocha": "^3.5.3",
+    "nyc": "^11.2.1",
+    "power-assert": "^1.4.4",
+    "prettier": "^1.7.4",
     "proxyquire": "^1.7.11"
   }
 }

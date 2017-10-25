@@ -1,0 +1,8 @@
+{
+  "requiresKeyFile": true,
+  "requiresProjectId": true,
+  "product": "logging",
+  "client_reference_url": 
+    "https://cloud.google.com/logging/docs/setup/nodejs",
+  "release_quality": "beta"
+}
