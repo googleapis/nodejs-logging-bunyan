@@ -52,7 +52,8 @@
     "test": "mocha test/*.js"
   },
   "dependencies": {
-    "@google-cloud/logging": "^1.0.0"
+    "@google-cloud/logging": "^1.0.0",
+    "extend": "^3.0.1"
   },
   "devDependencies": {
     "@google-cloud/nodejs-repo-tools": "^2.0.11",
@@ -63,7 +64,6 @@
     "eslint-config-prettier": "^2.6.0",
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-prettier": "^2.3.1",
-    "extend": "^3.0.1",
     "intelli-espower-loader": "^1.0.1",
     "mocha": "^3.5.3",
     "nyc": "^11.2.1",

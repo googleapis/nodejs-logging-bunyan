@@ -3,9 +3,7 @@ var loggingBunyan = require('@google-cloud/logging-bunyan')();
 
 var logger = bunyan.createLogger({
   name: 'my-service',
-  streams: [
-    loggingBunyan.stream('info')
-  ]
+  streams: [loggingBunyan.stream('info')],
 });
 
 logger.error('warp nacelles offline');
