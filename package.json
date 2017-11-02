@@ -45,19 +45,19 @@
   ],
   "scripts": {
     "docs": "repo-tools exec -- jsdoc -c .jsdoc.js",
-    "generate-scaffolding": "repo-tools generate all",
+    "generate-scaffolding": "repo-tools generate all --except lib_readme",
     "lint": "repo-tools lint --cmd eslint -- src/ samples/ system-test/ test/",
-    "prettier": "prettier --write src/*.js src/*/*.js samples/*.js samples/*/*.js test/*.js test/*/*.js system-test/*.js system-test/*/*.js",
+    "prettier": "repo-tools exec -- prettier --write src/*.js src/*/*.js samples/*.js samples/*/*.js test/*.js test/*/*.js system-test/*.js system-test/*/*.js",
     "samples-test": "cd samples/ && npm link ../ && npm test && cd ../",
-    "system-test": "mocha system-test/*.js --no-timeouts --bail",
-    "test": "mocha test/*.js"
+    "system-test": "repo-tools test run --cmd mocha -- system-test/*.js --no-timeouts --bail",
+    "test": "repo-tools test run --cmd mocha -- test/*.js"
   },
   "dependencies": {
     "@google-cloud/logging": "^1.0.0",
     "extend": "^3.0.1"
   },
   "devDependencies": {
-    "@google-cloud/nodejs-repo-tools": "^2.0.11",
+    "@google-cloud/nodejs-repo-tools": "^2.1.0",
     "async": "^2.5.0",
     "bunyan": "^1.8.5",
     "codecov": "^3.0.0",
