@@ -20,7 +20,7 @@ var assert = require('assert');
 var bunyan = require('bunyan');
 
 var logging = require('@google-cloud/logging')();
-var loggingBunyan = require('../')();
+var loggingBunyan = require('../').LoggingBunyan();
 
 describe('LoggingBunyan', function() {
   var WRITE_CONSISTENCY_DELAY_MS = 90000;

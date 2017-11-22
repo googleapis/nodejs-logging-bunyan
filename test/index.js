@@ -68,12 +68,12 @@ describe('logging-bunyan', function() {
   };
 
   before(function() {
-    LoggingBunyan = proxyquire('../src/index.js', {
+    LoggingBunyan = proxyquire('../build/src/index.js', {
       '@google-cloud/logging': fakeLogging,
       stream: fakeStream,
     });
 
-    LoggingBunyanCached = extend(true, {}, LoggingBunyan);
+    LoggingBunyanCached = extend(true, {}, LoggingBunyan.LoggingBunyan);
   });
 
   beforeEach(function() {
@@ -81,15 +81,15 @@ describe('logging-bunyan', function() {
     fakeLoggingOptions_ = null;
     fakeLogName_ = null;
 
-    extend(true, LoggingBunyan, LoggingBunyanCached);
-    loggingBunyan = new LoggingBunyan(OPTIONS);
+    extend(true, LoggingBunyan.LoggingBunyan, LoggingBunyanCached);
+    loggingBunyan = new LoggingBunyan.LoggingBunyan(OPTIONS);
   });
 
   describe('instantiation', function() {
     it('should create a new instance of LoggingBunyan', function() {
       // jshint newcap:false
-      var loggingBunyan = LoggingBunyan(OPTIONS);
-      assert(loggingBunyan instanceof LoggingBunyan);
+      var loggingBunyan = LoggingBunyan.LoggingBunyan(OPTIONS);
+      assert(loggingBunyan instanceof LoggingBunyan.LoggingBunyan);
     });
 
     it('should be an object mode Writable', function() {
@@ -98,11 +98,11 @@ describe('logging-bunyan', function() {
     });
 
     it('should localize the provided resource', function() {
-      assert.strictEqual(loggingBunyan.resource_, OPTIONS.resource);
+      assert.strictEqual(loggingBunyan.resource, OPTIONS.resource);
     });
 
     it('should localize the provided service context', function() {
-      assert.strictEqual(loggingBunyan.serviceContext_, OPTIONS.serviceContext);
+      assert.strictEqual(loggingBunyan.serviceContext, OPTIONS.serviceContext);
     });
 
     it('should localize Log instance using provided name', function() {
@@ -114,7 +114,7 @@ describe('logging-bunyan', function() {
       var optionsWithoutLogName = extend({}, OPTIONS);
       delete optionsWithoutLogName.logName;
 
-      new LoggingBunyan(optionsWithoutLogName);
+      new LoggingBunyan.LoggingBunyan(optionsWithoutLogName);
 
       assert.strictEqual(fakeLoggingOptions_, optionsWithoutLogName);
       assert.strictEqual(fakeLogName_, 'bunyan_log');
@@ -143,9 +143,9 @@ describe('logging-bunyan', function() {
     });
 
     it('should properly create an entry', function(done) {
-      loggingBunyan.log_.entry = function(entryMetadata, record) {
+      loggingBunyan.stackdriverLog.entry = function(entryMetadata, record) {
         assert.deepEqual(entryMetadata, {
-          resource: loggingBunyan.resource_,
+          resource: loggingBunyan.resource,
           timestamp: RECORD.time,
           severity: LoggingBunyan.BUNYAN_TO_STACKDRIVER[RECORD.level],
         });
@@ -160,7 +160,7 @@ describe('logging-bunyan', function() {
       var recordWithMsg = extend({msg: 'msg'}, RECORD);
       var recordWithMessage = extend({message: 'msg'}, RECORD);
 
-      loggingBunyan.log_.entry = function(entryMetadata, record) {
+      loggingBunyan.stackdriverLog.entry = function(entryMetadata, record) {
         assert.deepStrictEqual(record, recordWithMessage);
         done();
       };
@@ -190,7 +190,7 @@ describe('logging-bunyan', function() {
         RECORD
       );
 
-      loggingBunyan.log_.entry = function(entryMetadata, record_) {
+      loggingBunyan.stackdriverLog.entry = function(entryMetadata, record_) {
         assert.deepStrictEqual(record_, expectedRecord);
         done();
       };
@@ -210,7 +210,7 @@ describe('logging-bunyan', function() {
         RECORD
       );
 
-      loggingBunyan.log_.entry = function(entryMetadata, record_) {
+      loggingBunyan.stackdriverLog.entry = function(entryMetadata, record_) {
         assert.deepStrictEqual(record_, record);
         done();
       };
@@ -229,9 +229,9 @@ describe('logging-bunyan', function() {
         RECORD
       );
 
-      loggingBunyan.log_.entry = function(entryMetadata, record) {
+      loggingBunyan.stackdriverLog.entry = function(entryMetadata, record) {
         assert.deepStrictEqual(entryMetadata, {
-          resource: loggingBunyan.resource_,
+          resource: loggingBunyan.resource,
           timestamp: RECORD.time,
           severity: LoggingBunyan.BUNYAN_TO_STACKDRIVER[RECORD.level],
           httpRequest: HTTP_REQUEST,
@@ -247,9 +247,9 @@ describe('logging-bunyan', function() {
       const recordWithTrace = extend({}, RECORD);
       recordWithTrace[LoggingBunyan.LOGGING_TRACE_KEY] = 'trace1';
 
-      loggingBunyan.log_.entry = function(entryMetadata, record) {
+      loggingBunyan.stackdriverLog.entry = function(entryMetadata, record) {
         assert.deepStrictEqual(entryMetadata, {
-          resource: loggingBunyan.resource_,
+          resource: loggingBunyan.resource,
           timestamp: RECORD.time,
           severity: LoggingBunyan.BUNYAN_TO_STACKDRIVER[RECORD.level],
           trace: 'trace1',
@@ -367,7 +367,6 @@ describe('logging-bunyan', function() {
       },
     };
     loggingBunyan.write(RECORD, '', assert.ifError);
-
     global._google_trace_agent = {
       getCurrentContextId: function() {
         return null;
@@ -409,11 +408,11 @@ describe('logging-bunyan', function() {
     it('should write the record to the log instance', function(done) {
       var entry = {};
 
-      loggingBunyan.log_.entry = function() {
+      loggingBunyan.stackdriverLog.entry = function() {
         return entry;
       };
 
-      loggingBunyan.log_.write = function(entries, callback) {
+      loggingBunyan.stackdriverLog.write = function(entries, callback) {
         assert.strictEqual(entries, entry);
         callback(); // done()
       };
@@ -444,11 +443,11 @@ describe('logging-bunyan', function() {
     it('should write the records to the log instance', function(done) {
       var entry = {};
 
-      loggingBunyan.log_.entry = function() {
+      loggingBunyan.stackdriverLog.entry = function() {
         return entry;
       };
 
-      loggingBunyan.log_.write = function(entries, callback) {
+      loggingBunyan.stackdriverLog.write = function(entries, callback) {
         assert.deepStrictEqual(entries, [entry, entry]);
         callback(); // done()
       };
