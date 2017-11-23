@@ -154,7 +154,7 @@ interface StackdriverLogging {
 
 interface StackdriverEntry {
   constructor: (metadata?: StackdriverEntryMetadata, data?: {message: string}| string) => StackdriverEntry,
-  data?: {message: string}|string,
+  data?: {message?: string, pid?: string, test?: {circular?: string}}|string,
   metadata?: StackdriverEntryMetadata
 }
 
