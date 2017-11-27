@@ -230,7 +230,13 @@ export class LoggingBunyan extends Writable {
    * @private
    */
   // Writable._writev used 'any' in function signature.
-  _writev(chunks: BunyanLogRecord[], callback?: Function) {
+  _writev(
+      chunks: Array<{
+        // tslint:disable-next-line:no-any
+        chunk: any;
+        encoding: string;
+      }>,
+      callback?: Function) {
     // tslint:disable-next-line:no-any
     const entries = chunks.map((request: any) => {
       return this.formatEntry_(request.chunk);
