@@ -42,7 +42,8 @@ describe('LoggingBunyan', () => {
         args: ['first'],
         level: 'info',
         verify: (entry: StackdriverEntry) => {
-          assert.strictEqual(entry.data, {message: 'first', pid: process.pid});
+          assert.strictEqual((entry.data as StackdriverData).message, 'first');
+          assert.strictEqual((entry.data as StackdriverData).pid, process.pid);
         },
       },
 
@@ -50,10 +51,9 @@ describe('LoggingBunyan', () => {
         args: [new Error('second')],
         level: 'error',
         verify: (entry: StackdriverEntry) => {
-          assert((entry.data as {
-                   message: string
-                 }).message.startsWith('Error: second'));
-          assert.strictEqual((entry.data as {pid: string}).pid, process.pid);
+          assert(((entry.data as StackdriverData).message as string)
+                     .startsWith('Error: second'));
+          assert.strictEqual((entry.data as StackdriverData).pid, process.pid);
         },
       },
 
@@ -66,13 +66,11 @@ describe('LoggingBunyan', () => {
         ],
         level: 'info',
         verify: (entry: StackdriverEntry) => {
-          assert.strictEqual(
-              (entry.data as {message: string}).message, 'third');
-          assert.strictEqual((entry.data as {pid: string}).pid, process.pid);
-          assert.deepStrictEqual(
-              (entry.data as {test: {circular: string}}).test, {
-                circular: '[Circular]',
-              });
+          assert.strictEqual((entry.data as StackdriverData).message, 'third');
+          assert.strictEqual((entry.data as StackdriverData).pid, process.pid);
+          assert.deepStrictEqual((entry.data as StackdriverData).test, {
+            circular: '[Circular]',
+          });
         },
       },
     ];
@@ -86,9 +84,8 @@ describe('LoggingBunyan', () => {
       ],
       level: 'info',
       verify: (entry: StackdriverEntry) => {
-        assert.strictEqual(
-            (entry.data as {message: string}).message, 'earliest');
-        assert.strictEqual((entry.data as {pid: string}).pid, process.pid);
+        assert.strictEqual((entry.data as StackdriverData).message, 'earliest');
+        assert.strictEqual((entry.data as StackdriverData).pid, process.pid);
         assert.strictEqual(
             ((entry.metadata as StackdriverEntryMetadata).timestamp as Date)
                 .toString(),

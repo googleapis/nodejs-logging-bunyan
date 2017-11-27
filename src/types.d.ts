@@ -147,15 +147,18 @@ interface StackdriverLogging {
   // define additional properties and methods.
 }
 
-// interface Metadata {
-//   stack?: string,
-//   httpRequest?: HttpRequest
-// }
-
 interface StackdriverEntry {
   constructor: (metadata?: StackdriverEntryMetadata, data?: {message: string}| string) => StackdriverEntry,
-  data?: {message?: string, pid?: string, test?: {circular?: string}}|string,
+  data?: StackdriverData|string,
   metadata?: StackdriverEntryMetadata
+}
+
+interface StackdriverData {
+  serviceContext?: ServiceContext;
+  message?: string;
+  metadata?: Metadata;
+  pid?: string;
+  test?: {circular?: string};
 }
 
 type LogWriteResponse = {}[];
