@@ -202,7 +202,7 @@ export class LoggingBunyan extends Writable {
    * bunyan through Writable#write.
    */
   // Writable._write used 'any' in function signature.
-  private _writev(
+  _writev(
       chunks: Array<{
         // tslint:disable-next-line:no-any
         chunk: any;

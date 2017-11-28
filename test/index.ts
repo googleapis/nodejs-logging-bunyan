@@ -88,12 +88,6 @@ describe('logging-bunyan', () => {
   });
 
   describe('instantiation', () => {
-    it('should create a new instance of LoggingBunyan', () => {
-      // jshint newcap:false
-      const loggingBunyan = loggingBunyanLib.LoggingBunyan(OPTIONS);
-      assert(loggingBunyan instanceof loggingBunyanLib.LoggingBunyan);
-    });
-
     it('should be an object mode Writable', () => {
       assert(loggingBunyan instanceof FakeWritable);
       assert.deepStrictEqual(fakeWritableOptions_, {objectMode: true});
