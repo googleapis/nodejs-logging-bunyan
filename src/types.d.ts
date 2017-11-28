@@ -112,12 +112,6 @@ interface StackdriverLog {
   private_key?: string;
 }
 
-// interface StackdriverData {
-//   serviceContext?: ServiceContext,
-//   message?: string,
-//   metadata?: Metadata
-// }
-
 interface StackdriverEntryMetadata {
   resource?: MonitoredResource,
   timestamp?: Date,
@@ -161,6 +155,11 @@ interface StackdriverData {
   test?: {circular?: string};
 }
 
+interface Metadata {
+  stack?: string;
+  httpRequest?: HttpRequest;
+}
+
 type LogWriteResponse = {}[];
 
 interface HttpRequest {
@@ -189,4 +188,10 @@ interface BunyanLogRecord {
   level?: string,
   time?: Date,
   httpRequest?: HttpRequest
+}
+
+interface StreamResponse {
+  level: string|number,
+  type: string,
+  stream: {}
 }

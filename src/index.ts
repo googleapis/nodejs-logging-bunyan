@@ -14,32 +14,28 @@
  * limitations under the License.
  */
 
-'use strict';
-
-import * as extend from 'extend';
-import * as util from 'util';
 import {Writable} from 'stream';
+import * as util from 'util';
 const logging = require('@google-cloud/logging');
-// var Writable = require('stream').Writable;
 
 // Map of Stackdriver logging levels.
-const BUNYAN_TO_STACKDRIVER: {[key: number]: string} = {
-  60: 'CRITICAL',
-  50: 'ERROR',
-  40: 'WARNING',
-  30: 'INFO',
-  20: 'DEBUG',
-  10: 'DEBUG',
-};
+const BUNYAN_TO_STACKDRIVER: Map<number, string> = new Map([
+  [60, 'CRITICAL'],
+  [50, 'ERROR'],
+  [40, 'WARNING'],
+  [30, 'INFO'],
+  [20, 'DEBUG'],
+  [10, 'DEBUG'],
+]);
 
-/*!
+/**
  * Key to use in the Bunyan payload to allow users to indicate a trace for the
  * request, and to store as an intermediate value on the log entry before it
  * gets written to the Stackdriver logging API.
  */
 export const LOGGING_TRACE_KEY = 'logging.googleapis.com/trace';
 
-/*!
+/**
  * Gets the current fully qualified trace ID when available from the
  * @google-cloud/trace-agent library in the LogEntry.trace field format of:
  * "projects/[PROJECT-ID]/traces/[TRACE-ID]".
@@ -70,9 +66,6 @@ export class LoggingBunyan extends Writable {
   private stackdriverLog:
       StackdriverLog;  // TODO: add type for @google-cloud/logging
   constructor(options: Options) {
-    if (new.target !== LoggingBunyan) {
-      return new LoggingBunyan(options);
-    }
     options = options || {};
     super({objectMode: true});
     this.logName = options.logName || 'bunyan_log';
@@ -84,18 +77,10 @@ export class LoggingBunyan extends Writable {
   }
 
   /**
-   * @param {string|number} level A bunyan logging level. Log entries at or
-   * above this level will be routed to Stackdriver Logging.
-   *
-   * @example
-   * const logger = bunyan.createLogger({
-   *   name: 'my-service',
-   *   streams: [
-   *     loggingBunyan.stream('info')
-   *   ]
+   * Convenience method that Builds a bunyan stream object that you can put in
+   * the bunyan streams list.
    */
-  stream(level: string|
-         number): {level: string|number, type: string, stream: {}} {
+  stream(level: string|number): StreamResponse {
     return {
       level,
       type: 'raw',
@@ -105,12 +90,8 @@ export class LoggingBunyan extends Writable {
 
   /**
    * Format a bunyan record into a Stackdriver log entry.
-   *
-   * @param {object} record - Bunyan log record.
-   *
-   * @private
    */
-  formatEntry_(record: string|BunyanLogRecord) {
+  private formatEntry_(record: string|BunyanLogRecord) {
     if (typeof record === 'string') {
       throw new Error(
           '@google-cloud/logging-bunyan only works as a raw bunyan stream type.');
@@ -175,11 +156,10 @@ export class LoggingBunyan extends Writable {
    * By the time the Writable stream buffer gets flushed and _write gets called
    * we may well be in a different continuation.
    */
+  write(record: BunyanLogRecord, callback?: Function): boolean;
+  write(record: BunyanLogRecord, encoding?: string, callback?: Function):
+      boolean;
   // Writable.write used 'any' in function signature.
-  // tslint:disable-next-line:no-any
-  write(record: any, callback?: Function): boolean;
-  // tslint:disable-next-line:no-any
-  write(record: any, encoding?: string, callback?: Function): boolean;
   // tslint:disable-next-line:no-any
   write(...args: any[]): boolean {
     let record = args[0];
@@ -191,7 +171,7 @@ export class LoggingBunyan extends Writable {
     } else {
       callback = args[1];
     }
-    record = extend({}, record);
+    record = Object.assign({}, record);
     // record does not have index signature.
     // tslint:disable-next-line:no-any
     if (!(record as any)[LOGGING_TRACE_KEY]) {
@@ -211,10 +191,6 @@ export class LoggingBunyan extends Writable {
   /**
    * Relay a log entry to the logging agent. This is called by bunyan through
    * Writable#write.
-   *
-   * @param {object} record - Bunyan log record.
-   *
-   * @private
    */
   _write(record: BunyanLogRecord, encoding?: string, callback?: Function) {
     const entry = this.formatEntry_(record);
@@ -224,21 +200,19 @@ export class LoggingBunyan extends Writable {
   /**
    * Relay an array of log entries to the logging agent. This is called by
    * bunyan through Writable#write.
-   *
-   * @param {object[]} records - Array of WritableStream WriteReq objects.
-   *
-   * @private
    */
-  // Writable._writev used 'any' in function signature.
-  _writev(
+  // Writable._write used 'any' in function signature.
+  private _writev(
       chunks: Array<{
         // tslint:disable-next-line:no-any
         chunk: any;
         encoding: string;
       }>,
       callback?: Function) {
-    // tslint:disable-next-line:no-any
-    const entries = chunks.map((request: any) => {
+    const entries = chunks.map((request: {
+                                 // tslint:disable-next-line:no-any
+                                 chunk: any; encoding: string;
+                               }) => {
       return this.formatEntry_(request.chunk);
     });
 

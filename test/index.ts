@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import * as assert from 'assert';
-import * as extend from 'extend';
 import * as proxyquire from 'proxyquire';
 import {LoggingBunyan} from '../src/index';
 
@@ -84,7 +83,7 @@ describe('logging-bunyan', () => {
     fakeLoggingOptions_ = null;
     fakeLogName_ = null;
 
-    extend(true, loggingBunyanLib.LoggingBunyan, loggingBunyanCached);
+    Object.assign(true, loggingBunyanLib.LoggingBunyan, loggingBunyanCached);
     loggingBunyan = new loggingBunyanLib.LoggingBunyan(OPTIONS);
   });
 
@@ -114,7 +113,7 @@ describe('logging-bunyan', () => {
     });
 
     it('should localize Log instance using default name, options', () => {
-      const optionsWithoutLogName = extend({}, OPTIONS);
+      const optionsWithoutLogName = Object.assign({}, OPTIONS);
       delete optionsWithoutLogName.logName;
 
       const loggingBunyan =
@@ -164,8 +163,8 @@ describe('logging-bunyan', () => {
     });
 
     it('should rename the msg property to message', (done) => {
-      const recordWithMsg = extend({msg: 'msg'}, RECORD);
-      const recordWithMessage = extend({message: 'msg'}, RECORD);
+      const recordWithMsg = Object.assign({msg: 'msg'}, RECORD);
+      const recordWithMessage = Object.assign({message: 'msg'}, RECORD);
 
       loggingBunyan.stackdriverLog.entry =
           (entryMetadata: StackdriverEntryMetadata,
@@ -178,7 +177,7 @@ describe('logging-bunyan', () => {
     });
 
     it('should inject the error stack as the message', (done) => {
-      const record = extend(
+      const record = Object.assign(
           {
             msg: 'msg',
             err: {
@@ -186,7 +185,7 @@ describe('logging-bunyan', () => {
             },
           },
           RECORD);
-      const expectedRecord = extend(
+      const expectedRecord = Object.assign(
           {
             msg: 'msg',
             err: {
@@ -208,7 +207,7 @@ describe('logging-bunyan', () => {
     });
 
     it('should leave message property intact when present', (done) => {
-      const record = extend(
+      const record = Object.assign(
           {
             msg: 'msg',
             message: 'message',
@@ -232,7 +231,7 @@ describe('logging-bunyan', () => {
       const HTTP_REQUEST = {
         statusCode: 418,
       };
-      const recordWithRequest = extend(
+      const recordWithRequest = Object.assign(
           {
             httpRequest: HTTP_REQUEST,
           },
@@ -255,7 +254,7 @@ describe('logging-bunyan', () => {
     });
 
     it('should promote prefixed trace property to metadata', (done) => {
-      const recordWithTrace = extend({}, RECORD);
+      const recordWithTrace = Object.assign({}, RECORD);
       // recordWithTrace does not have index signature.
       // tslint:disable-next-line:no-any
       (recordWithTrace as any)[loggingBunyanLib.LOGGING_TRACE_KEY] = 'trace1';
@@ -312,8 +311,8 @@ describe('logging-bunyan', () => {
           return 'project1';
         },
       };
-      const recordWithoutTrace = extend({}, RECORD);
-      const recordWithTrace = extend({}, RECORD);
+      const recordWithoutTrace = Object.assign({}, RECORD);
+      const recordWithTrace = Object.assign({}, RECORD);
       // recordWithTrace does not have index signature.
       // tslint:disable-next-line:no-any
       (recordWithTrace as any)[loggingBunyanLib.LOGGING_TRACE_KEY] =
@@ -349,7 +348,7 @@ describe('logging-bunyan', () => {
           return 'project1';
         },
       };
-      const recordWithTraceAlreadySet = extend({}, RECORD);
+      const recordWithTraceAlreadySet = Object.assign({}, RECORD);
       // recordWithTraceAlreadySet does not have index signature.
       // tslint:disable-next-line:no-any
       (recordWithTraceAlreadySet as any)[loggingBunyanLib.LOGGING_TRACE_KEY] =
@@ -494,14 +493,16 @@ describe('logging-bunyan', () => {
 
   describe('BUNYAN_TO_STACKDRIVER', () => {
     it('should correctly map to Stackdriver Logging levels', () => {
-      assert.deepEqual(loggingBunyanLib.BUNYAN_TO_STACKDRIVER, {
-        60: 'CRITICAL',
-        50: 'ERROR',
-        40: 'WARNING',
-        30: 'INFO',
-        20: 'DEBUG',
-        10: 'DEBUG',
-      });
+      const bunyanToStackdriver: Map<number, string> = new Map([
+        [60, 'CRITICAL'],
+        [50, 'ERROR'],
+        [40, 'WARNING'],
+        [30, 'INFO'],
+        [20, 'DEBUG'],
+        [10, 'DEBUG'],
+      ]);
+      assert.deepEqual(
+          loggingBunyanLib.BUNYAN_TO_STACKDRIVER, bunyanToStackdriver);
     });
   });
 });
