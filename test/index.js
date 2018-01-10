@@ -77,6 +77,7 @@ describe('logging-bunyan', function() {
   });
 
   beforeEach(function() {
+    this.timeout(10000);
     fakeLogInstance = {};
     fakeLoggingOptions_ = null;
     fakeLogName_ = null;
@@ -267,6 +268,7 @@ describe('logging-bunyan', function() {
     var oldTraceAgent;
 
     beforeEach(function() {
+      this.timeout(10000);
       oldWritableWrite = FakeWritable.prototype.write;
       oldTraceAgent = global._google_trace_agent;
     });
@@ -393,6 +395,7 @@ describe('logging-bunyan', function() {
 
   describe('_write', function() {
     beforeEach(function() {
+      this.timeout(10000);
       fakeLogInstance.entry = function() {};
       fakeLogInstance.write = function() {};
     });
@@ -425,6 +428,7 @@ describe('logging-bunyan', function() {
   describe('_writev', function() {
     var RECORDS = [{chunk: RECORD}, {chunk: RECORD}];
     beforeEach(function() {
+      this.timeout(10000);
       fakeLogInstance.entry = function() {};
       fakeLogInstance.write = function() {};
     });
