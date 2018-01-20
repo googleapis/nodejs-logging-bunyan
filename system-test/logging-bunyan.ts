@@ -42,8 +42,10 @@ describe('LoggingBunyan', () => {
         args: ['first'],
         level: 'info',
         verify: (entry: types.StackdriverEntry) => {
-          assert.strictEqual((entry.data as types.StackdriverData).message, 'first');
-          assert.strictEqual((entry.data as types.StackdriverData).pid, process.pid);
+          assert.strictEqual(
+              (entry.data as types.StackdriverData).message, 'first');
+          assert.strictEqual(
+              (entry.data as types.StackdriverData).pid, process.pid);
         },
       },
 
@@ -53,7 +55,8 @@ describe('LoggingBunyan', () => {
         verify: (entry: types.StackdriverEntry) => {
           assert(((entry.data as types.StackdriverData).message as string)
                      .startsWith('Error: second'));
-          assert.strictEqual((entry.data as types.StackdriverData).pid, process.pid);
+          assert.strictEqual(
+              (entry.data as types.StackdriverData).pid, process.pid);
         },
       },
 
@@ -66,8 +69,10 @@ describe('LoggingBunyan', () => {
         ],
         level: 'info',
         verify: (entry: types.StackdriverEntry) => {
-          assert.strictEqual((entry.data as types.StackdriverData).message, 'third');
-          assert.strictEqual((entry.data as types.StackdriverData).pid, process.pid);
+          assert.strictEqual(
+              (entry.data as types.StackdriverData).message, 'third');
+          assert.strictEqual(
+              (entry.data as types.StackdriverData).pid, process.pid);
           assert.deepStrictEqual((entry.data as types.StackdriverData).test, {
             circular: '[Circular]',
           });
@@ -84,10 +89,13 @@ describe('LoggingBunyan', () => {
       ],
       level: 'info',
       verify: (entry: types.StackdriverEntry) => {
-        assert.strictEqual((entry.data as types.StackdriverData).message, 'earliest');
-        assert.strictEqual((entry.data as types.StackdriverData).pid, process.pid);
         assert.strictEqual(
-            ((entry.metadata as types.StackdriverEntryMetadata).timestamp as Date)
+            (entry.data as types.StackdriverData).message, 'earliest');
+        assert.strictEqual(
+            (entry.data as types.StackdriverData).pid, process.pid);
+        assert.strictEqual(
+            ((entry.metadata as types.StackdriverEntryMetadata).timestamp as
+             Date)
                 .toString(),
             timestamp.toString());
       },

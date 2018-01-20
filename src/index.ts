@@ -66,7 +66,7 @@ export class LoggingBunyan extends Writable {
   private resource: types.MonitoredResource|undefined;
   private serviceContext: types.ServiceContext|undefined;
   private stackdriverLog:
-    types.StackdriverLog;  // TODO: add type for @google-cloud/logging
+      types.StackdriverLog;  // TODO: add type for @google-cloud/logging
   constructor(options: types.Options) {
     options = options || {};
     super({objectMode: true});
@@ -202,7 +202,8 @@ export class LoggingBunyan extends Writable {
    * Relay a log entry to the logging agent. This is called by bunyan through
    * Writable#write.
    */
-  _write(record: types.BunyanLogRecord, encoding?: string, callback?: Function) {
+  _write(
+      record: types.BunyanLogRecord, encoding?: string, callback?: Function) {
     const entry = this.formatEntry_(record);
     this.stackdriverLog.write(entry, callback);
   }
