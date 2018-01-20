@@ -25,17 +25,17 @@ const INDEX_JS = 'index.js';
 const TS_CODE_ARRAY: CodeSample[] = [
   {
     code: `import * as loggingBunyan from '@google-cloud/logging-bunyan';
-new loggingBunyan.loggingBunyan();`,
+new loggingBunyan.LoggingBunyan();`,
     description: 'imports the module using * syntax'
   },
   {
-    code: `import {loggingBunyan} from '@google-cloud/logging-bunyan';
-new loggingBunyan();`,
+    code: `import {LoggingBunyan} from '@google-cloud/logging-bunyan';
+new LoggingBunyan();`,
     description: 'imports the module with {} syntax'
   },
   {
-    code: `import {loggingBunyan} from '@google-cloud/logging-bunyan';
-new loggingBunyan({
+    code: `import {LoggingBunyan} from '@google-cloud/logging-bunyan';
+new LoggingBunyan({
   serviceContext: {
     service: 'some service'
   }
@@ -43,8 +43,8 @@ new loggingBunyan({
     description: 'imports the module and starts with a partial `serviceContext`'
   },
   {
-    code: `import {loggingBunyan} from '@google-cloud/logging-bunyan';
-new loggingBunyan({
+    code: `import {LoggingBunyan} from '@google-cloud/logging-bunyan';
+new LoggingBunyan({
   projectId: 'some-project',
   serviceContext: {
     service: 'Some service',
@@ -59,14 +59,14 @@ new loggingBunyan({
 const JS_CODE_ARRAY: CodeSample[] = [
   {
     code:
-        `const loggingBunyan = require('@google-cloud/logging-bunyan').loggingBunyan;
-new loggingBunyan();`,
+        `const LoggingBunyan = require('@google-cloud/logging-bunyan').LoggingBunyan;
+new LoggingBunyan();`,
     description: 'requires the module using Node 4+ syntax'
   },
   {
     code:
-        `const loggingBunyan = require('@google-cloud/logging-bunyan').loggingBunyan;
-new loggingBunyan({
+        `const LoggingBunyan = require('@google-cloud/logging-bunyan').LoggingBunyan;
+new LoggingBunyan({
   serviceContext: {
     service: 'some service'
   }
@@ -76,8 +76,8 @@ new loggingBunyan({
   },
   {
     code:
-        `const loggingBunyan = require('@google-cloud/logging-bunyan').loggingBunyan;
-new loggingBunyan({
+        `const LoggingBunyan = require('@google-cloud/logging-bunyan').LoggingBunyan;
+new LoggingBunyan({
   projectId: 'some-project',
   serviceContext: {
     service: 'Some service',
@@ -91,7 +91,7 @@ new loggingBunyan({
 
 const TIMEOUT_MS = 2 * 60 * 1000;
 
-const DEBUG = true;
+const DEBUG = false;
 function log(txt: string): void {
   if (DEBUG) {
     console.log(txt);

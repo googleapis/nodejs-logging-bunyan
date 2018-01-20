@@ -67,7 +67,7 @@ export class LoggingBunyan extends Writable {
   private serviceContext: types.ServiceContext|undefined;
   private stackdriverLog:
       types.StackdriverLog;  // TODO: add type for @google-cloud/logging
-  constructor(options: types.Options) {
+  constructor(options?: types.Options) {
     options = options || {};
     super({objectMode: true});
     this.logName = options.logName || 'bunyan_log';
