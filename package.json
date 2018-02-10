@@ -63,12 +63,15 @@
     "fix": "gts fix",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
-    "posttest": "npm run check"
+    "posttest": "npm run check",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
     "@google-cloud/logging": "^1.0.0",
     "@types/bunyan": "^1.8.3",
-    "typescript": "~2.6.1"
+    "typescript": "~2.6.1",
+    "snyk": "^1.69.7"
   },
   "devDependencies": {
     "@google-cloud/nodejs-repo-tools": "^2.1.0",
@@ -103,5 +106,6 @@
     "proxyquire": "^1.7.11",
     "rimraf": "^2.6.2",
     "tmp": "0.0.33"
-  }
+  },
+  "snyk": true
 }
