@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
+import * as bunyan from 'bunyan';
 import {Writable} from 'stream';
 import * as util from 'util';
-import * as bunyan from 'bunyan';
+
 const logging = require('@google-cloud/logging');
 
 import * as types from './types/core';
@@ -84,11 +85,7 @@ export class LoggingBunyan extends Writable {
    * the bunyan streams list.
    */
   stream(level: bunyan.LogLevel): bunyan.Stream {
-    return {
-      level,
-      type: 'raw',
-      stream: this as NodeJS.WritableStream
-    };
+    return {level, type: 'raw', stream: this as NodeJS.WritableStream};
   }
 
   /**
