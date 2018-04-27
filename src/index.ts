@@ -16,6 +16,7 @@
 
 import {Writable} from 'stream';
 import * as util from 'util';
+import * as bunyan from 'bunyan';
 const logging = require('@google-cloud/logging');
 
 import * as types from './types/core';
@@ -82,11 +83,11 @@ export class LoggingBunyan extends Writable {
    * Convenience method that Builds a bunyan stream object that you can put in
    * the bunyan streams list.
    */
-  stream(level: string|number): types.StreamResponse {
+  stream(level: bunyan.LogLevel): bunyan.Stream {
     return {
       level,
       type: 'raw',
-      stream: this,
+      stream: this as NodeJS.WritableStream
     };
   }
 
