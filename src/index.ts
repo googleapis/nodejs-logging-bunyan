@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import * as bunyan from 'bunyan';
 import {Writable} from 'stream';
 import * as util from 'util';
 
@@ -84,7 +83,7 @@ export class LoggingBunyan extends Writable {
    * Convenience method that Builds a bunyan stream object that you can put in
    * the bunyan streams list.
    */
-  stream(level: bunyan.LogLevel): bunyan.Stream {
+  stream(level: types.LogLevel): types.StreamResponse {
     return {level, type: 'raw', stream: this as NodeJS.WritableStream};
   }
 
