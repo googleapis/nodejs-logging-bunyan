@@ -27,9 +27,7 @@ const LOG_NAME = 'bunyan_log_system_tests';
 describe('LoggingBunyan', () => {
   const WRITE_CONSISTENCY_DELAY_MS = 90000;
 
-  const loggingBunyan = new LoggingBunyan({
-    logName: LOG_NAME
-  });
+  const loggingBunyan = new LoggingBunyan({logName: LOG_NAME});
   const logger = bunyan.createLogger({
     name: 'google-cloud-node-system-test',
     streams: [loggingBunyan.stream('info')],
