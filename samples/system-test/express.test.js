@@ -23,23 +23,22 @@ const delay = require(`delay`);
 const logging = require('@google-cloud/logging')();
 const got = require('got');
 
-
 test.before(tools.checkCredentials);
 
 test.serial(`should write using bunyan`, async t => {
   t.plan(4);
 
   // Start the express server.
-  const child = execa(process.execPath, ['express.js'], {
+  execa(process.execPath, ['express.js'], {
     cwd: path.join(__dirname, `..`),
-    cleanup: true  // kill child process when parent exits.
+    cleanup: true, // kill child process when parent exits.
   }).stdout.pipe(process.stdout);
 
   // Wait 10 seconds for initialization and for server to start listening.
   await delay(10 * 1000);
 
   // Make an HTTP request to exercise a request logging path.
-  const response = await got('http://localhost:8080/');
+  await got('http://localhost:8080/');
 
   // Wait 10 seconds for logs to be written to stackdriver service.
   await delay(10 * 1000);

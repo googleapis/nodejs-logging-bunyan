@@ -41,8 +41,8 @@ async function startServer() {
     res.send('hello world');
   });
 
-  // `logger` can be used a global logger – i.e. one not correlated to specific
-  // requests.
+  // `logger` can be used as a global logger, one not correlated to any specific
+  // request.
   logger.info({port: 8080}, 'bonjour');
 
   // Start listening on the http server.
