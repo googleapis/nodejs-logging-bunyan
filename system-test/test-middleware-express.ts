@@ -27,15 +27,8 @@ const WRITE_CONSISTENCY_DELAY_MS = 20 * 1000;
 const TEST_TIMEOUT = WRITE_CONSISTENCY_DELAY_MS + (10 * 1000);
 
 describe('express middleware', () => {
-  // mocha doesn't like async describe callbacks. So we have to initialize
-  // logger, mw in the before block. Extra gymnastics are required to properly
-  // type variables that seemingly (to the compiler) are conditionally
-  // intialized.
-  // https://github.com/mochajs/mocha/issues/2975
-  type ThenArg<T> = T extends Promise<infer U>? U : T;
-  type ElbThenType = ThenArg<ReturnType<typeof elb.middleware>>;
-  let logger: ElbThenType['logger'];
-  let mw: ElbThenType['mw'];
+  let logger: elb.MiddlewareReturnType['logger'];
+  let mw: elb.MiddlewareReturnType['mw'];
 
   before(async () => {
     ({logger, mw} = await elb.middleware({level: 'info'}));

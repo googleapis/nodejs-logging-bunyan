@@ -21,12 +21,6 @@ import {NextFunction, Request, Response} from 'express';
 import {LOGGING_TRACE_KEY, LoggingBunyan} from '../index';
 import * as types from '../types/core';
 
-export interface LoggingMiddlewareFunction {
-  (req: Request, res: Response, next: NextFunction): void;
-  logger: ReturnType<typeof bunyan.createLogger>;
-  mw: LoggingMiddlewareFunction;
-}
-
 export type LogObject = {
   // tslint:disable-next-line:no-any bunyan interface.
   [level in bunyan.LogLevelString]: (...args: any[]) => void;
@@ -73,14 +67,21 @@ function makeLogObject(
   return log;
 }
 
-export interface ExpressMiddlewareOptions extends types.Options {
+export interface MiddlewareOptions extends types.Options {
   level?: types.LogLevel;
+}
+
+export interface MiddlewareReturnType {
+  logger: ReturnType<typeof bunyan.createLogger>;
+  // tslint:disable-next-line:no-any express middleware.
+  mw: (req: Request, res: Response, next: NextFunction) => any;
 }
 
 /**
  * Express middleware
  */
-export async function middleware(options?: ExpressMiddlewareOptions) {
+export async function middleware(options?: MiddlewareOptions):
+    Promise<MiddlewareReturnType> {
   const defaultOptions = {logName: 'bunyan_log', level: 'info'};
   options = Object.assign({}, defaultOptions, options);
 
