@@ -99,7 +99,7 @@ logger.info('shields at 99%');
 ### Using as an express middleware
 
 ***NOTE: this feature is experimental. The API may change in a backwards
-incompatible way until this is deemed stable. Please do provide us feedback so
+incompatible way until this is deemed stable. Please provide us feedback so
 that we can better refine this express integration.***
 
 We provide a middleware that can be used in an express application. Apart from
@@ -108,7 +108,7 @@ Logging: request bundling.
 
 The middleware adds a `bunyan`-style log function to the `request` object. You
 can use this wherever you have access to the `request` object (`req` in the
-sample below). All log enties that are made on behalf of a specific request are
+sample below). All log entries that are made on behalf of a specific request are
 shown bundled together in the Stackdriver Logging UI.
 
 ```javascript
@@ -122,8 +122,9 @@ async function startServer() {
   const app = express();
 
   // Install the logging middleware. This ensures that a Bunyan-style `log`
-  // function is available on the `request` object. This should be the very
-  // first middleware you attach to your app.
+  // function is available on the `request` object. Attach this as one of the
+  // earliest middleware to make sure that log function is available in all the
+  // subsequent middleware and routes.
   app.use(mw);
 
   // Setup an http route and a route handler.
