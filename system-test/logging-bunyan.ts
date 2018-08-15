@@ -160,7 +160,7 @@ describe('LoggingBunyan', () => {
     });
 
     afterEach(async () => {
-       await errorsTransport.deleteAllEvents();
+      await errorsTransport.deleteAllEvents();
     });
 
     it('reports errors when logging errors', function(done) {
@@ -176,8 +176,7 @@ describe('LoggingBunyan', () => {
         assert.strictEqual(errEvent.count, '1');
         assert.strictEqual(
             errEvent.representative.serviceContext.service, 'default');
-        assert(errEvent.representative.message.startsWith(
-            `Error: ${message}`));
+        assert(errEvent.representative.message.startsWith(`Error: ${message}`));
         done();
       }, ERROR_REPORTING_DELEY_MS);
     });
