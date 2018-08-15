@@ -147,7 +147,7 @@ describe('LoggingBunyan', () => {
     }, WRITE_CONSISTENCY_DELAY_MS);
   });
 
-  describe.only('ErrorReporting', () => {
+  describe('ErrorReporting', () => {
     const ERROR_REPORTING_DELEY_MS = 20 * 1000;
     const errorsTransport = new ErrorsApiTransport();
 
