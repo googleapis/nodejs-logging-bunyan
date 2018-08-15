@@ -15,7 +15,6 @@
  */
 
 import {Writable} from 'stream';
-import * as util from 'util';
 import * as express from './middleware/express';
 
 // Export the express middleware as 'express'.
@@ -69,7 +68,7 @@ function getCurrentTraceFromAgent() {
 export class LoggingBunyan extends Writable {
   private logName: string;
   private resource: types.MonitoredResource|undefined;
-  private serviceContext: types.ServiceContext|undefined;
+  private serviceContext: types.ServiceContext;
   stackdriverLog:
       types.StackdriverLog;  // TODO: add type for @google-cloud/logging
   constructor(options?: types.Options) {
@@ -77,10 +76,18 @@ export class LoggingBunyan extends Writable {
     super({objectMode: true});
     this.logName = options.logName || 'bunyan_log';
     this.resource = options.resource;
-    this.serviceContext = options.serviceContext;
+    this.serviceContext = options.serviceContext || {};
     this.stackdriverLog = logging(options).log(this.logName, {
       removeCircular: true,
     });
+
+    // serviceContext.service is required by the Error Reporting
+    // API.  Without it, errors that are logged with level 'error'
+    // or higher will not be displayed in the Error Reporting
+    // console
+    if (!this.serviceContext.service) {
+      this.serviceContext.service = 'default';
+    }
   }
 
   /**
