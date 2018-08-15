@@ -148,14 +148,14 @@ describe('LoggingBunyan', () => {
   });
 
   describe('ErrorReporting', () => {
-    const ERROR_REPORTING_DELEY_MS = 20 * 1000;
+    const ERROR_REPORTING_DELAY_MS = 20 * 1000;
     const errorsTransport = new ErrorsApiTransport();
 
     beforeEach(async function() {
-      this.timeout(2 * ERROR_REPORTING_DELEY_MS);
+      this.timeout(2 * ERROR_REPORTING_DELAY_MS);
       await errorsTransport.deleteAllEvents();
       await new Promise((resolve, reject) => {
-        setTimeout(resolve, ERROR_REPORTING_DELEY_MS);
+        setTimeout(resolve, ERROR_REPORTING_DELAY_MS);
       });
     });
 
@@ -164,7 +164,7 @@ describe('LoggingBunyan', () => {
     });
 
     it('reports errors when logging errors', function(done) {
-      this.timeout(2 * ERROR_REPORTING_DELEY_MS);
+      this.timeout(2 * ERROR_REPORTING_DELAY_MS);
       const message = `an error at ${Date.now()}`;
       // logger does not have index signature.
       // tslint:disable-next-line:no-any
@@ -178,7 +178,7 @@ describe('LoggingBunyan', () => {
             errEvent.representative.serviceContext.service, 'default');
         assert(errEvent.representative.message.startsWith(`Error: ${message}`));
         done();
-      }, ERROR_REPORTING_DELEY_MS);
+      }, ERROR_REPORTING_DELAY_MS);
     });
   });
 });
