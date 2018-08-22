@@ -118,6 +118,25 @@ describe('logging-bunyan', () => {
       assert.strictEqual(fakeLogName_, 'bunyan_log');
       assert.deepStrictEqual(fakeLogOptions_, {removeCircular: true});
     });
+
+    it('should provide a service value if serviceContext is not specified',
+       () => {
+         const loggingBunyan = new loggingBunyanLib.LoggingBunyan();
+         assert.strictEqual(loggingBunyan.serviceContext.service, 'default');
+       });
+
+    it('should provide a service value serviceContext does not have one',
+       () => {
+         const loggingBunyan = new loggingBunyanLib.LoggingBunyan(
+             {serviceContext: {version: 'some-version'}});
+         assert.strictEqual(loggingBunyan.serviceContext.service, 'default');
+       });
+
+    it('should use the service value provided', () => {
+      const loggingBunyan = new loggingBunyanLib.LoggingBunyan(
+          {serviceContext: {service: 'some-version', version: 'some-version'}});
+      assert.strictEqual(loggingBunyan.serviceContext.service, 'some-version');
+    });
   });
 
   describe('stream', () => {
