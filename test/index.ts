@@ -125,7 +125,7 @@ describe('logging-bunyan', () => {
          assert.strictEqual(loggingBunyan.serviceContext.service, 'default');
        });
 
-    it('should provide a service value serviceContext does not have one',
+    it('should provide a service value if serviceContext does not have one',
        () => {
          const loggingBunyan = new loggingBunyanLib.LoggingBunyan(
              {serviceContext: {version: 'some-version'}});
