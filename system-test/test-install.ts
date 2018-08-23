@@ -18,43 +18,87 @@ import * as check from 'post-install-check';
 
 const TS_CODE_ARRAY: check.CodeSample[] = [
   {
-    code: `import * as loggingBunyan from '@google-cloud/logging-bunyan';
-new loggingBunyan.LoggingBunyan();`,
+    code: `import * as lb from '@google-cloud/logging-bunyan';
+import * as bunyan from 'bunyan';
+
+const loggingBunyan = new lb.LoggingBunyan();
+
+bunyan.createLogger({
+  name: 'my-service',
+  level: 'info',
+  streams: [
+    {stream: process.stdout},
+    loggingBunyan.stream('info'),
+  ],
+});`,
     description: 'imports the module using * syntax',
-    dependencies: [],
+    dependencies: ['bunyan'],
     devDependencies: ['@types/bunyan']
   },
   {
     code: `import {LoggingBunyan} from '@google-cloud/logging-bunyan';
-new LoggingBunyan();`,
+import * as bunyan from 'bunyan';
+
+const loggingBunyan = new LoggingBunyan();
+
+bunyan.createLogger({
+  name: 'my-service',
+  level: 'info',
+  streams: [
+    {stream: process.stdout},
+    loggingBunyan.stream('info'),
+  ],
+});`,
     description: 'imports the module with {} syntax',
-    dependencies: [],
+    dependencies: ['bunyan'],
     devDependencies: ['@types/bunyan']
   },
   {
     code: `import {LoggingBunyan} from '@google-cloud/logging-bunyan';
-new LoggingBunyan({
+import * as bunyan from 'bunyan';
+
+const loggingBunyan = new LoggingBunyan({
   serviceContext: {
     service: 'some service'
   }
+});
+
+bunyan.createLogger({
+  name: 'my-service',
+  level: 'info',
+  streams: [
+    {stream: process.stdout},
+    loggingBunyan.stream('info'),
+  ],
 });`,
     description:
         'imports the module and starts with a partial `serviceContext`',
-    dependencies: [],
+    dependencies: ['bunyan'],
     devDependencies: ['@types/bunyan']
   },
   {
     code: `import {LoggingBunyan} from '@google-cloud/logging-bunyan';
-new LoggingBunyan({
+import * as bunyan from 'bunyan';
+
+const loggingBunyan = new LoggingBunyan({
   projectId: 'some-project',
   serviceContext: {
     service: 'Some service',
     version: 'Some version'
   }
+});
+
+bunyan.createLogger({
+  name: 'my-service',
+  level: 'info',
+  streams: [
+    {stream: process.stdout},
+    loggingBunyan.stream('info'),
+  ],
 });`,
     description:
         'imports the module and starts with a complete `serviceContext`',
-    dependencies: [],
+    dependencies: ['bunyan'],
     devDependencies: ['@types/bunyan']
   },
   {
@@ -76,37 +120,70 @@ const JS_CODE_ARRAY: check.CodeSample[] = [
   {
     code:
         `const LoggingBunyan = require('@google-cloud/logging-bunyan').LoggingBunyan;
-new LoggingBunyan();`,
+const bunyan = require('bunyan');
+
+const loggingBunyan = new LoggingBunyan();
+
+bunyan.createLogger({
+  name: 'my-service',
+  level: 'info',
+  streams: [
+    {stream: process.stdout},
+    loggingBunyan.stream('info'),
+  ],
+});`,
     description: 'requires the module using Node 4+ syntax',
-    dependencies: [],
+    dependencies: ['bunyan'],
     devDependencies: []
   },
   {
     code:
         `const LoggingBunyan = require('@google-cloud/logging-bunyan').LoggingBunyan;
-new LoggingBunyan({
+const bunyan = require('bunyan');
+
+const loggingBunyan = new LoggingBunyan({
   serviceContext: {
     service: 'some service'
   }
+});
+
+bunyan.createLogger({
+  name: 'my-service',
+  level: 'info',
+  streams: [
+    {stream: process.stdout},
+    loggingBunyan.stream('info'),
+  ],
 });`,
     description:
         'requires the module and starts with a partial `serviceContext`',
-    dependencies: [],
+    dependencies: ['bunyan'],
     devDependencies: []
   },
   {
     code:
         `const LoggingBunyan = require('@google-cloud/logging-bunyan').LoggingBunyan;
-new LoggingBunyan({
+const bunyan = require('bunyan');
+
+const loggingBunyan = new LoggingBunyan({
   projectId: 'some-project',
   serviceContext: {
     service: 'Some service',
     version: 'Some version'
   }
+});
+
+bunyan.createLogger({
+  name: 'my-service',
+  level: 'info',
+  streams: [
+    {stream: process.stdout},
+    loggingBunyan.stream('info'),
+  ],
 });`,
     description:
         'requires the module and starts with a complete `serviceContext`',
-    dependencies: [],
+    dependencies: ['bunyan'],
     devDependencies: []
   },
   {
