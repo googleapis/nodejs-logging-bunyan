@@ -129,7 +129,6 @@ describe('logging-bunyan', () => {
          try {
            // tslint:disable-next-line:no-unused-expression
            new loggingBunyanLib.LoggingBunyan({serviceContext: {}});
-           assert.fail('Should throw during instatiation');
          } catch (err) {
            assert.strictEqual(
                err.message,
