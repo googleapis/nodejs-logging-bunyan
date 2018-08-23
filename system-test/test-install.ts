@@ -41,7 +41,8 @@ new LoggingBunyan({
     service: 'some service'
   }
 });`,
-    description: 'imports the module and starts with a partial `serviceContext`',
+    description:
+        'imports the module and starts with a partial `serviceContext`',
     dependencies,
     devDependencies
   },
