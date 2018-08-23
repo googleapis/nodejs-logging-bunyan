@@ -119,24 +119,25 @@ describe('logging-bunyan', () => {
       assert.deepStrictEqual(fakeLogOptions_, {removeCircular: true});
     });
 
-    it('should provide a service value if serviceContext is not specified',
-       () => {
-         const loggingBunyan = new loggingBunyanLib.LoggingBunyan();
-         assert.strictEqual(loggingBunyan.serviceContext.service, 'default');
-       });
-
-    it('should provide a service value if serviceContext does not have one',
-       () => {
-         const loggingBunyan = new loggingBunyanLib.LoggingBunyan(
-             {serviceContext: {version: 'some-version'}});
-         assert.strictEqual(loggingBunyan.serviceContext.service, 'default');
-       });
-
-    it('should use the service value provided', () => {
-      const loggingBunyan = new loggingBunyanLib.LoggingBunyan(
-          {serviceContext: {service: 'some-version', version: 'some-version'}});
-      assert.strictEqual(loggingBunyan.serviceContext.service, 'some-version');
+    it('should not throw if a serviceContext is not specified', () => {
+      // tslint:disable-next-line:no-unused-expression
+      new loggingBunyanLib.LoggingBunyan();
     });
+
+    it('should throw if a serviceContext is specified without a service',
+       done => {
+         try {
+           // tslint:disable-next-line:no-unused-expression
+           new loggingBunyanLib.LoggingBunyan({serviceContext: {}});
+           assert.fail('Should throw during instatiation');
+         } catch (err) {
+           assert.strictEqual(
+               err.message,
+               `If 'serviceContext' is specified then ` +
+                   `'serviceContext.service' is required.`);
+           done();
+         }
+       });
   });
 
   describe('stream', () => {

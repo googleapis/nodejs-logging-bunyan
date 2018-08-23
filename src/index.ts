@@ -68,7 +68,7 @@ function getCurrentTraceFromAgent() {
 export class LoggingBunyan extends Writable {
   private logName: string;
   private resource: types.MonitoredResource|undefined;
-  private serviceContext: types.ServiceContext;
+  private serviceContext?: types.ServiceContext;
   stackdriverLog:
       types.StackdriverLog;  // TODO: add type for @google-cloud/logging
   constructor(options?: types.Options) {
@@ -76,7 +76,7 @@ export class LoggingBunyan extends Writable {
     super({objectMode: true});
     this.logName = options.logName || 'bunyan_log';
     this.resource = options.resource;
-    this.serviceContext = options.serviceContext || {};
+    this.serviceContext = options.serviceContext;
     this.stackdriverLog = logging(options).log(this.logName, {
       removeCircular: true,
     });
@@ -84,9 +84,14 @@ export class LoggingBunyan extends Writable {
     // serviceContext.service is required by the Error Reporting
     // API.  Without it, errors that are logged with level 'error'
     // or higher will not be displayed in the Error Reporting
-    // console
-    if (!this.serviceContext.service) {
-      this.serviceContext.service = 'default';
+    // console.
+    //
+    // As a result, if serviceContext is specified, it is required
+    // that serviceContext.service is specified.
+    if (this.serviceContext && !this.serviceContext.service) {
+      throw new Error(
+          `If 'serviceContext' is specified then ` +
+          `'serviceContext.service' is required.`);
     }
   }
 

@@ -16,6 +16,7 @@
 
 import * as assert from 'assert';
 import * as bunyan from 'bunyan';
+import delay from 'delay';
 
 import * as types from '../src/types/core';
 import {ErrorsApiTransport} from './errors-transport';
@@ -28,7 +29,10 @@ const LOG_NAME = 'bunyan_log_system_tests';
 describe('LoggingBunyan', () => {
   const WRITE_CONSISTENCY_DELAY_MS = 90000;
 
-  const loggingBunyan = new LoggingBunyan({logName: LOG_NAME});
+  const loggingBunyan = new LoggingBunyan({
+    logName: LOG_NAME,
+    serviceContext: {service: 'logging-bunyan-system-test', version: 'none'}
+  });
   const logger = bunyan.createLogger({
     name: 'google-cloud-node-system-test',
     streams: [loggingBunyan.stream('info')],
@@ -147,7 +151,7 @@ describe('LoggingBunyan', () => {
     }, WRITE_CONSISTENCY_DELAY_MS);
   });
 
-  describe('ErrorReporting', () => {
+  describe.only('ErrorReporting', () => {
     const ERROR_REPORTING_DELAY_MS = 20 * 1000;
     const errorsTransport = new ErrorsApiTransport();
 
@@ -163,22 +167,21 @@ describe('LoggingBunyan', () => {
       await errorsTransport.deleteAllEvents();
     });
 
-    it('reports errors when logging errors', function(done) {
+    it('reports errors when logging errors', async function() {
       this.timeout(2 * ERROR_REPORTING_DELAY_MS);
       const message = `an error at ${Date.now()}`;
       // logger does not have index signature.
       // tslint:disable-next-line:no-any
       (logger as any)['error'].call(logger, new Error(message));
-      setTimeout(async () => {
-        const errors = await errorsTransport.getAllGroups();
-        assert.strictEqual(errors.length, 1);
-        const errEvent = errors[0];
-        assert.strictEqual(errEvent.count, '1');
-        assert.strictEqual(
-            errEvent.representative.serviceContext.service, 'default');
-        assert(errEvent.representative.message.startsWith(`Error: ${message}`));
-        done();
-      }, ERROR_REPORTING_DELAY_MS);
+      await delay(ERROR_REPORTING_DELAY_MS);
+      const errors = await errorsTransport.getAllGroups();
+      assert.strictEqual(errors.length, 1);
+      const errEvent = errors[0];
+      assert.strictEqual(errEvent.count, '1');
+      assert.strictEqual(
+          errEvent.representative.serviceContext.service,
+          'logging-bunyan-system-test');
+      assert(errEvent.representative.message.startsWith(`Error: ${message}`));
     });
   });
 });
