@@ -71,14 +71,7 @@ const bunyan = require('bunyan');
 const {LoggingBunyan} = require('@google-cloud/logging-bunyan');
 
 // Creates a Bunyan Stackdriver Logging client
-const loggingBunyan = new LoggingBunyan({
-  serviceContext: {
-    service: 'my-service', // required to report logged errors
-                           // to the Google Cloud Error Reporting
-                           // console
-    version: 'my-version'
-  }
-});
+const loggingBunyan = new LoggingBunyan();
 
 // Create a Bunyan logger that streams to Stackdriver Logging
 // Logs will be written to: "projects/YOUR_PROJECT_ID/logs/bunyan_log"
@@ -157,7 +150,20 @@ startServer();
 
 ### Error Reporting
 
-Any `Error` objects you log at severity `error` or higher can automatically be picked up by [Stackdriver Error Reporting][error-reporting] if you have specified a `serviceContext.service` when instatiating a `LoggingBunyan` instance.  It is an error to specify a `serviceContext` but not specify `serviceContext.service`.
+Any `Error` objects you log at severity `error` or higher can automatically be picked up by [Stackdriver Error Reporting][error-reporting] if you have specified a `serviceContext.service` when instatiating a `LoggingBunyan` instance:
+
+```javascript
+const loggingBunyan = new LoggingBunyan({
+  serviceContext: {
+    service: 'my-service', // required to report logged errors
+                           // to the Google Cloud Error Reporting
+                           // console
+    version: 'my-version'
+  }
+});
+```
+
+It is an error to specify a `serviceContext` but not specify `serviceContext.service`.
 
 Make sure to add logs to your [uncaught exception][uncaught] and [unhandled rejection][unhandled] handlers if you want to see those errors too.
 
