@@ -9,9 +9,9 @@
 ### Bug Fixes
 - fix: logged errors are reported to error reporting ([#122](https://github.com/googleapis/nodejs-logging-bunyan/pull/122))
 - chore: fix `stream` example in README ([#134](https://github.com/googleapis/nodejs-logging-bunyan/pull/134))
+- fix(deps): update @google-cloud/logging to 4.x ([#152](https://github.com/googleapis/nodejs-logging-bunyan/pull/152))
 
 ### Dependencies
-- chore(deps): update @google-cloud/logging to 4.x ([#152](https://github.com/googleapis/nodejs-logging-bunyan/pull/152))
 - fix(deps): update dependency @google-cloud/common to ^0.25.0 ([#150](https://github.com/googleapis/nodejs-logging-bunyan/pull/150))
 - chore(deps): update dependency delay to v4 ([#142](https://github.com/googleapis/nodejs-logging-bunyan/pull/142))
 - fix(deps): update dependency @google-cloud/common to ^0.24.0 ([#146](https://github.com/googleapis/nodejs-logging-bunyan/pull/146))
