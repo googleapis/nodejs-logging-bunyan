@@ -84,7 +84,7 @@ export async function middleware(options?: MiddlewareOptions):
       const trace = `projects/${projectId}/traces/${spanContext.traceId}`;
 
       (req as AnnotatedRequest).log =
-          logger.child({[LOGGING_TRACE_KEY]: trace});
+          logger.child({[LOGGING_TRACE_KEY]: trace}, true /*simple child */);
       next();
     }
   };
