@@ -4,6 +4,11 @@
 
 [1]: https://www.npmjs.com/package/nodejs-logging-bunyan?activeTab=versions
 
+## v0.9.3
+
+### Documentation
+- fix: Add documentation string to constructor
+
 ## v0.9.2
 
 ### Bug Fixes
