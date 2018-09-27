@@ -30,7 +30,9 @@ export type LogObject = {
   [level in bunyan.LogLevelString]: (...args: any[]) => void;
 };
 
-export interface AnnotatedRequest extends Request { log: LogObject; }
+export interface AnnotatedRequest extends Request {
+  log: LogObject;
+}
 
 function makeLogFunction(
     level: bunyan.LogLevelString,
