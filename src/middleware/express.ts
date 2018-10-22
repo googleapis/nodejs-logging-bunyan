@@ -25,12 +25,13 @@ export type NextFunction = (err?: Error) => void;
 import {LOGGING_TRACE_KEY, LoggingBunyan} from '../index';
 import * as types from '../types/core';
 
-export type LogObject = {
-  // tslint:disable-next-line:no-any bunyan interface.
-  [level in bunyan.LogLevelString]: (...args: any[]) => void;
-};
-
-export interface AnnotatedRequest extends Request { log: LogObject; }
+// @types/bunyan doesn't export Logger. Access it via ReturnType on
+// createLogger.
+type Logger = ReturnType<typeof bunyan.createLogger>;
+                   
+export interface AnnotatedRequest extends Request {
+  log: Logger;
+}
 
 function makeLogFunction(
     level: bunyan.LogLevelString,
@@ -74,7 +75,7 @@ export interface MiddlewareOptions extends types.Options {
 }
 
 export interface MiddlewareReturnType {
-  logger: ReturnType<typeof bunyan.createLogger>;
+  logger: Logger;
   // tslint:disable-next-line:no-any express middleware.
   mw: (req: Request, res: Response, next: NextFunction) => any;
 }
@@ -119,7 +120,8 @@ export async function middleware(options?: MiddlewareOptions):
 
       const trace = `projects/${projectId}/traces/${spanContext.traceId}`;
 
-      (req as AnnotatedRequest).log = makeLogObject(logger, trace);
+      (req as AnnotatedRequest).log =
+          logger.child({[LOGGING_TRACE_KEY]: trace}, true /*simple child */);
       next();
     }
   };
