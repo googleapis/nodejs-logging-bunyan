@@ -27,8 +27,6 @@ const got = require('got');
 before(tools.checkCredentials);
 
 it(`should write using bunyan`, async () => {
-  //t.plan(4);
-
   // Start the express server.
   execa(process.execPath, ['express.js'], {
     cwd: path.join(__dirname, `..`),
