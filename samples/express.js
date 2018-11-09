@@ -24,7 +24,7 @@ const express = require('express');
 
 async function startServer() {
   const {logger, mw} = await lb.express.middleware({
-    logName: 'samples_express'
+    logName: 'samples_express',
   });
   const app = express();
 
