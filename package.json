@@ -35,22 +35,6 @@
     "bunyan stream",
     "winston"
   ],
-  "contributors": [
-    "Alexander Fenster <fenster@google.com>",
-    "Ali Ijaz Sheikh <ofrobots@google.com>",
-    "Dave Gramlich <callmehiphop@gmail.com>",
-    "Dave Raffensperger <daveraff@google.com>",
-    "Dominic Kramer <DominicDKramer@google.com>",
-    "Jason Dobry <jmdobry@users.noreply.github.com>",
-    "Justin Beckwith <justin.beckwith@gmail.com>",
-    "Luke Sneeringer <luke@sneeringer.com>",
-    "Stephen Sawchuk <sawchuk@gmail.com>",
-    "Stephen Sawchuk <stephenplusplus@users.noreply.github.com>",
-    "Stephen Sawchuk <stephenplusplusplus@gmail.com>",
-    "Tim Swast <swast@google.com>",
-    "circle-ci <circle-ci@circleci.com>",
-    "greenkeeper[bot] <greenkeeper[bot]@users.noreply.github.com>"
-  ],
   "scripts": {
     "docs": "jsdoc -c .jsdoc.js",
     "generate-scaffolding": "repo-tools generate all --except lib_readme",
@@ -60,7 +44,7 @@
     "presystem-test": "npm run compile",
     "samples-test": "cd samples/ && npm link ../ && npm test && cd ../",
     "system-test": "mocha build/system-test --timeout 600000",
-    "test": "nyc mocha build/test",
+    "test": "nyc mocha --recursive build/test",
     "check": "gts check",
     "clean": "gts clean",
     "compile": "tsc -p .",
@@ -72,11 +56,10 @@
     "codecov": "nyc report --reporter=json && codecov -f .coverage/*.json"
   },
   "dependencies": {
-    "@google-cloud/logging": "^4.0.1",
-    "@opencensus/propagation-stackdriver": "^0.0.6"
+    "@google-cloud/logging": "^4.1.0"
   },
   "devDependencies": {
-    "@google-cloud/nodejs-repo-tools": "^2.3.0",
+    "@google-cloud/nodejs-repo-tools": "^3.0.0",
     "@types/bunyan": "^1.8.4",
     "@types/express": "^4.16.0",
     "@types/mocha": "^5.2.3",

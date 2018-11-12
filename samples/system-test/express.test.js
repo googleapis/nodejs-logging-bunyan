@@ -25,6 +25,8 @@ const logging = new Logging();
 const got = require('got');
 
 before(tools.checkCredentials);
+const lb = require('@google-cloud/logging-bunyan');
+const {APP_LOG_SUFFIX} = lb.express;
 
 it(`should write using bunyan`, async () => {
   // Start the express server.
@@ -43,7 +45,7 @@ it(`should write using bunyan`, async () => {
   await delay(10 * 1000);
 
   // Make sure the log was written to Stackdriver Logging.
-  const log = logging.log('bunyan_log');
+  const log = logging.log(`samples_express_${APP_LOG_SUFFIX}`);
   const entries = (await log.getEntries({pageSize: 1}))[0];
   assert.strictEqual(entries.length, 1);
   const entry = entries[0];
