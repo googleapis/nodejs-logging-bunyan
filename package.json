@@ -86,7 +86,8 @@
     "proxyquire": "^2.0.1",
     "request": "^2.88.0",
     "source-map-support": "^0.5.6",
-    "typescript": "~3.1.0"
+    "typescript": "~3.1.0",
+    "@types/sinon": "5.0.5"
   },
   "peerDependencies": {
     "bunyan": "*"
