@@ -15,7 +15,8 @@
  */
 
 import * as common from '@google-cloud/common';
-import * as request from 'request';
+import * as r from 'request';  // types only
+import {teenyRequest} from 'teeny-request';
 
 const packageJson = require('../../package.json');
 
@@ -46,7 +47,7 @@ const ONE_HOUR_API = 'timeRange.period=PERIOD_1_HOUR';
 export class ErrorsApiTransport extends common.Service {
   constructor() {
     super({
-      requestModule: request,
+      requestModule: teenyRequest as typeof r,
       baseUrl: 'https://clouderrorreporting.googleapis.com/v1beta1',
       scopes: ['https://www.googleapis.com/auth/cloud-platform'],
       packageJson
