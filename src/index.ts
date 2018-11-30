@@ -251,7 +251,7 @@ export class LoggingBunyan extends Writable {
   write(...args: any[]): boolean {
     let record = args[0];
     let encoding: string|null = null;
-    type Callback = (error: Error | null | undefined) => void;
+    type Callback = (error: Error|null|undefined) => void;
     let callback: Callback|string;
     if (typeof args[1] === 'string') {
       encoding = args[1];
