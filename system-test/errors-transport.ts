@@ -15,9 +15,9 @@
  */
 
 import * as common from '@google-cloud/common';
+import delay from 'delay';
 import * as r from 'request';  // types only
 import {teenyRequest} from 'teeny-request';
-import delay from 'delay';
 
 const packageJson = require('../../package.json');
 

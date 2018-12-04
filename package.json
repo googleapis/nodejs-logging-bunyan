@@ -12,10 +12,7 @@
   "types": "./build/src/index.d.ts",
   "files": [
     "build/src",
-    "!build/src/**/*.map",
-    "LICENSE",
-    "CODE_OF_CONDUCT.md",
-    "README.md"
+    "!build/src/**/*.map"
   ],
   "keywords": [
     "google apis client",
@@ -58,7 +55,6 @@
   "devDependencies": {
     "@google-cloud/nodejs-repo-tools": "^3.0.0",
     "@types/bunyan": "^1.8.4",
-    "@types/delay": "^3.1.0",
     "@types/express": "^4.16.0",
     "@types/mocha": "^5.2.3",
     "@types/node": "^10.3.6",
