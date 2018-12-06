@@ -16,7 +16,6 @@
 
 import * as assert from 'assert';
 import * as bunyan from 'bunyan';
-import delay from 'delay';
 import * as uuid from 'uuid';
 
 import * as types from '../src/types/core';
@@ -164,16 +163,6 @@ describe('LoggingBunyan', () => {
   describe('ErrorReporting', () => {
     const ERROR_REPORTING_DELAY_MS = 2 * 60 * 1000;
     const errorsTransport = new ErrorsApiTransport();
-
-    beforeEach(async function() {
-      this.timeout(2 * ERROR_REPORTING_DELAY_MS);
-      await errorsTransport.deleteAllEvents();
-      return delay(ERROR_REPORTING_DELAY_MS);
-    });
-
-    afterEach(async () => {
-      await errorsTransport.deleteAllEvents();
-    });
 
     it('reports errors when logging errors', async function() {
       this.timeout(2 * ERROR_REPORTING_DELAY_MS);
