@@ -17,6 +17,7 @@
 import * as assert from 'assert';
 import * as bunyan from 'bunyan';
 import delay from 'delay';
+import * as uuid from 'uuid';
 
 import * as types from '../src/types/core';
 import {ErrorsApiTransport} from './errors-transport';
@@ -25,17 +26,25 @@ const {Logging} = require('@google-cloud/logging');
 const logging = new Logging();
 import {LoggingBunyan} from '../src/index';
 
-const LOG_NAME = 'bunyan_log_system_tests';
+const UUID = uuid.v4();
+function uniqueName(name: string) {
+  return `${UUID}_${name}`;
+}
+
+const LOG_NAME = uniqueName('bunyan_log_system_tests');
+const LOGGER_NAME = uniqueName('google-cloud-node-system-test');
+const SERVICE = uniqueName('logging-bunyan-system-test');
+const VERSION = uniqueName('none');
 
 describe('LoggingBunyan', () => {
   const WRITE_CONSISTENCY_DELAY_MS = 90000;
 
   const loggingBunyan = new LoggingBunyan({
     logName: LOG_NAME,
-    serviceContext: {service: 'logging-bunyan-system-test', version: 'none'}
+    serviceContext: {service: SERVICE, version: VERSION}
   });
   const logger = bunyan.createLogger({
-    name: 'google-cloud-node-system-test',
+    name: LOGGER_NAME,
     streams: [loggingBunyan.stream('info')],
   });
 
@@ -152,7 +161,7 @@ describe('LoggingBunyan', () => {
     }, WRITE_CONSISTENCY_DELAY_MS);
   });
 
-  describe.only('ErrorReporting', () => {
+  describe('ErrorReporting', () => {
     const ERROR_REPORTING_DELAY_MS = 2 * 60 * 1000;
     const errorsTransport = new ErrorsApiTransport();
 
@@ -169,8 +178,9 @@ describe('LoggingBunyan', () => {
     it('reports errors when logging errors', async function() {
       this.timeout(2 * ERROR_REPORTING_DELAY_MS);
       const start = Date.now();
-      const service = 'logging-bunyan-system-test';
-      const message = `an error at ${start}`;
+      const service =
+          uniqueName('logging-bunyan-system-test-error-reporting-test');
+      const message = uniqueName(`an error at ${start}`);
       // logger does not have index signature.
       // tslint:disable-next-line:no-any
       (logger as any)['error'].call(logger, new Error(message));
