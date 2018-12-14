@@ -60,7 +60,8 @@ class FakeLoggingBunyan {
 let passedProjectId: string|undefined;
 let passedEmitRequestLog: Function|undefined;
 function fakeMakeMiddleware(
-    projectId: string, makeChildLogger: Function, emitRequestLog: Function): Function {
+    projectId: string, makeChildLogger: Function,
+    emitRequestLog: Function): Function {
   passedProjectId = projectId;
   passedEmitRequestLog = emitRequestLog;
   return FAKE_GENERATED_MIDDLEWARE;
@@ -91,7 +92,8 @@ describe('middleware/express', () => {
     // Should generate two loggers with the expected names.
     assert.ok(passedOptions);
     assert.strictEqual(passedOptions.length, 2);
-    assert.ok(passedOptions.some(option => option!.logName === `bunyan_log_${APP_LOG_SUFFIX}`));
+    assert.ok(passedOptions.some(
+        option => option!.logName === `bunyan_log_${APP_LOG_SUFFIX}`));
     assert.ok(passedOptions.some(option => option!.logName === `bunyan_log`));
     assert.ok(passedOptions.every(option => option!.level === 'info'));
   });
@@ -103,7 +105,8 @@ describe('middleware/express', () => {
     await middleware(OPTIONS);
     assert.ok(passedOptions);
     assert.strictEqual(passedOptions.length, 2);
-    assert.ok(passedOptions.some(option => option!.logName === `${LOGNAME}_${APP_LOG_SUFFIX}`));
+    assert.ok(passedOptions.some(
+        option => option!.logName === `${LOGNAME}_${APP_LOG_SUFFIX}`));
     assert.ok(passedOptions.some(option => option!.logName === LOGNAME));
     assert.ok(passedOptions.every(option => option!.level === LEVEL));
   });
@@ -113,14 +116,15 @@ describe('middleware/express', () => {
     assert.strictEqual(passedProjectId, FAKE_PROJECT_ID);
   });
 
-  [envDetect.GCPEnv.APP_ENGINE, envDetect.GCPEnv.CLOUD_FUNCTIONS].forEach(env => {
-    it(`should not generate the request logger on ${env}`, async () => {
-      authEnvironment = env;
-      await middleware();
-      assert.ok(passedOptions);
-      assert.strictEqual(passedOptions.length, 1);
-      // emitRequestLog parameter to makeChildLogger should be undefined.
-      assert.strictEqual(passedEmitRequestLog, undefined);
-    });
-  });
+  [envDetect.GCPEnv.APP_ENGINE, envDetect.GCPEnv.CLOUD_FUNCTIONS].forEach(
+      env => {
+        it(`should not generate the request logger on ${env}`, async () => {
+          authEnvironment = env;
+          await middleware();
+          assert.ok(passedOptions);
+          assert.strictEqual(passedOptions.length, 1);
+          // emitRequestLog parameter to makeChildLogger should be undefined.
+          assert.strictEqual(passedEmitRequestLog, undefined);
+        });
+      });
 });

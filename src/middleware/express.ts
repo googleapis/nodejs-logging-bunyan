@@ -58,13 +58,16 @@ export async function middleware(options?: MiddlewareOptions):
   });
 
   const auth = loggingBunyanApp.stackdriverLog.logging.auth;
-  const [env, projectId]  = await Promise.all([auth.getEnv(), auth.getProjectId()]);
+  const [env, projectId] =
+      await Promise.all([auth.getEnv(), auth.getProjectId()]);
 
   // Unless we are running on Google App Engine or Cloud Functions, generate a
   // parent request log entry that all the request-specific logs ("app logs")
-  // will nest under. GAE and GCF generate the parent request logs automatically.
+  // will nest under. GAE and GCF generate the parent request logs
+  // automatically.
   let emitRequestLog;
-  if (env !== envDetect.GCPEnv.APP_ENGINE && env !== envDetect.GCPEnv.CLOUD_FUNCTIONS) {
+  if (env !== envDetect.GCPEnv.APP_ENGINE &&
+      env !== envDetect.GCPEnv.CLOUD_FUNCTIONS) {
     const loggingBunyanReq = new LoggingBunyan(options);
     const requestLogger = bunyan.createLogger({
       name: options.logName!,
@@ -72,12 +75,13 @@ export async function middleware(options?: MiddlewareOptions):
     });
     emitRequestLog = (httpRequest: HttpRequest, trace: string) => {
       requestLogger.info({[LOGGING_TRACE_KEY]: trace, httpRequest});
-    }
+    };
   }
 
   return {
     logger,
-    mw: commonMiddleware.express.makeMiddleware(projectId, makeChildLogger, emitRequestLog)
+    mw: commonMiddleware.express.makeMiddleware(
+        projectId, makeChildLogger, emitRequestLog)
   };
 
   function makeChildLogger(trace: string) {
