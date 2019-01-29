@@ -67,7 +67,7 @@ For a more detailed Stackdriver Logging setup guide, see https://cloud.google.co
 const bunyan = require('bunyan');
 
 // Imports the Google Cloud client library for Bunyan (Node 6+)
-const {LoggingBunyan} = require('@google-cloud/logging-bunyan');
+const LoggingBunyan = require('@google-cloud/logging-bunyan');
 
 // Creates a Bunyan Stackdriver Logging client
 const loggingBunyan = new LoggingBunyan();
