@@ -62,7 +62,9 @@ export class ErrorsApiTransport extends common.Service {
 
   async request(options: common.DecorateRequestOptions) {
     return new Promise<ApiResponse>((resolve, reject) => {
-      super.request(options, (err, _, res) => err ? reject(err) : resolve(res));
+      super.request(options, (err, _, res) => {
+        return err ? reject(err) : resolve(res);
+      });
     });
   }
 
