@@ -182,7 +182,7 @@ than being one of the properties in the `payload` fields. This makes it easier t
 logger.info({labels: {someKey: 'some value'}}, 'test log message');
 ```
 
-All the label values must be strings for this promotion to work.
+All the label values must be strings for this automatic promotion to work. Otherwise the labels are left in the payload.
 
 ### Formatting Request Logs
 
