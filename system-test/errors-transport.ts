@@ -114,7 +114,7 @@ export class ErrorsApiTransport extends common.Service {
       if (!groupId) {
         const groups = await this.getAllGroups();
         if (!groups.length) continue;
-        console.log(`$ER$ got groups ${groups.map(g => g.representative.serviceContext.service)}`);
+        console.log(`$ER$ Lookging for group for service ${service} got groups ${groups.map(g => g.representative.serviceContext.service)}`);
         // find an error group that matches the service
         groups.forEach((group) => {
           try {
