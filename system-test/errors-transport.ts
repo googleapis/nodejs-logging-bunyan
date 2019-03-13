@@ -16,6 +16,7 @@
 
 import * as common from '@google-cloud/common';
 import delay from 'delay';
+import * as util from 'util';
 import * as r from 'request';  // types only
 import {teenyRequest} from 'teeny-request';
 
@@ -113,6 +114,7 @@ export class ErrorsApiTransport extends common.Service {
       if (!groupId) {
         const groups = await this.getAllGroups();
         if (!groups.length) continue;
+        console.log(`$ER$ got groups ${groups.map(g => g.representative.serviceContext.service)}`);
         // find an error group that matches the service
         groups.forEach((group) => {
           try {
@@ -130,6 +132,13 @@ export class ErrorsApiTransport extends common.Service {
       if (!groupId) continue;
 
       const events = await this.getGroupEvents(groupId);
+      const pretty = events.map((e) => { 
+        return {
+          message: e.message.substring(0, 20),
+          eventTime: new Date(e.eventTime).getTime()
+        };
+      });
+      console.log(`$ER$ looking for event past ${time}. Got events\n${util.inspect(pretty)}`);      
       events.forEach((event) => {
         if (new Date(event.eventTime).getTime() >= time) {
           filteredEvents.push(event);
