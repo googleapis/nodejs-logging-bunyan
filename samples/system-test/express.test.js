@@ -17,11 +17,13 @@
 
 const path = require('path');
 const {assert} = require('chai');
-const {execSync} = require('child_process');
+const cp = require('child_process');
 const delay = require('delay');
 const got = require('got');
 const {Logging} = require('@google-cloud/logging');
 const logging = new Logging();
+
+const execSync = (cmd) => cp.execSync(cmd, {encoding: 'utf-8'});
 
 const PORT = process.env.PORT || 8080;
 
