@@ -17,7 +17,7 @@
 
 const path = require('path');
 const {assert} = require('chai');
-const execa = require('execa');
+const {execSync} = require('child_process');
 const delay = require('delay');
 const got = require('got');
 const {Logging} = require('@google-cloud/logging');
