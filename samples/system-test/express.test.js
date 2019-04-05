@@ -17,13 +17,11 @@
 
 const path = require('path');
 const {assert} = require('chai');
-const cp = require('child_process');
+const {spawn} = require('child_process');
 const delay = require('delay');
 const got = require('got');
 const {Logging} = require('@google-cloud/logging');
 const logging = new Logging();
-
-const execSync = cmd => cp.execSync(cmd, {encoding: 'utf-8'});
 
 const PORT = process.env.PORT || 8080;
 
@@ -35,7 +33,7 @@ const {APP_LOG_SUFFIX} = lb.express;
 describe('express samples', () => {
   it('should write using bunyan', async () => {
     // Start the express server.
-    execa(process.execPath, ['express.js'], {
+    spawn(process.execPath, ['express.js'], {
       cwd: path.join(__dirname, '..'),
       cleanup: true, // kill child process when parent exits.
     }).stdout.pipe(process.stdout);
