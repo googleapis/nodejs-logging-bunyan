@@ -23,7 +23,7 @@ const got = require('got');
 const {Logging} = require('@google-cloud/logging');
 const logging = new Logging();
 
-const execSync = (cmd) => cp.execSync(cmd, {encoding: 'utf-8'});
+const execSync = cmd => cp.execSync(cmd, {encoding: 'utf-8'});
 
 const PORT = process.env.PORT || 8080;
 
