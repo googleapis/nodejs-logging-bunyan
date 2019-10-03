@@ -45,16 +45,18 @@
     "compile": "tsc -p .",
     "postcompile": "cpy ./src/types/* ./build/src/types",
     "fix": "gts fix && eslint --fix '**/*.js'",
-    "prepare": "npm run compile",
+    "prepare": "npm run snyk-protect && npm run compile",
     "pretest": "npm run compile",
     "posttest": "npm run check",
     "codecov": "nyc report --reporter=json && codecov -f .coverage/*.json",
     "docs-test": "linkinator docs",
-    "predocs-test": "npm run docs"
+    "predocs-test": "npm run docs",
+    "snyk-protect": "snyk protect"
   },
   "dependencies": {
     "@google-cloud/logging": "^5.0.0",
-    "google-auth-library": "^5.0.0"
+    "google-auth-library": "^5.0.0",
+    "snyk": "^1.230.5"
   },
   "devDependencies": {
     "@google-cloud/common": "^2.0.0",
@@ -91,5 +93,6 @@
   },
   "peerDependencies": {
     "bunyan": "*"
-  }
+  },
+  "snyk": true
 }
