@@ -16,6 +16,7 @@
 
 const path = require('path');
 const {assert} = require('chai');
+const {describe, it} = require('mocha');
 const {spawn} = require('child_process');
 const delay = require('delay');
 const got = require('got');
