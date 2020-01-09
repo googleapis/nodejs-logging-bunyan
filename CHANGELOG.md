@@ -4,6 +4,21 @@
 
 [1]: https://www.npmjs.com/package/nodejs-logging-bunyan?activeTab=versions
 
+### [2.0.2](https://www.github.com/googleapis/nodejs-logging-bunyan/compare/v2.0.1...v2.0.2) (2019-12-05)
+
+
+### Bug Fixes
+
+* **deps:** TypeScript 3.7.0 causes breaking change in typings ([#384](https://www.github.com/googleapis/nodejs-logging-bunyan/issues/384)) ([b7c509c](https://www.github.com/googleapis/nodejs-logging-bunyan/commit/b7c509ce00d8436405abe4e19922594825927a13))
+
+### [2.0.1](https://www.github.com/googleapis/nodejs-logging-bunyan/compare/v2.0.0...v2.0.1) (2019-12-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency yargs to v15 ([#377](https://www.github.com/googleapis/nodejs-logging-bunyan/issues/377)) ([730bac9](https://www.github.com/googleapis/nodejs-logging-bunyan/commit/730bac9fb1b16575318a0eb167d3bba550318704))
+* **docs:** snippets are now replaced in jsdoc comments ([#371](https://www.github.com/googleapis/nodejs-logging-bunyan/issues/371)) ([1cfbf8d](https://www.github.com/googleapis/nodejs-logging-bunyan/commit/1cfbf8deff023c09075d319904a267f13febbaeb))
+
 ## [2.0.0](https://www.github.com/googleapis/nodejs-logging-bunyan/compare/v1.2.3...v2.0.0) (2019-10-18)
 
 
