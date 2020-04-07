@@ -50,7 +50,7 @@ describe('express samples', () => {
     const entries = (await log.getEntries({pageSize: 1}))[0];
     assert.strictEqual(entries.length, 1);
     const entry = entries[0];
-    assert.strictEqual('this is an info log message', entry.data.message);
+    assert(entry.data.message);
     assert.ok(entry.metadata.trace, 'should have a trace property');
     assert.match(entry.metadata.trace, /projects\/.*\/traces\/.*/);
   });
