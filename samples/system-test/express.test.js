@@ -42,8 +42,8 @@ describe('express samples', () => {
     // Make an HTTP request to exercise a request logging path.
     await got(`http://localhost:${PORT}/`);
 
-    // Wait 5 seconds for logs to be written to stackdriver service.
-    await delay(5 * 1000);
+    // Wait 10 seconds for logs to be written to stackdriver service.
+    await delay(10 * 1000);
 
     // Make sure the log was written to Stackdriver Logging.
     const log = logging.log(`samples_express_${APP_LOG_SUFFIX}`);
@@ -51,7 +51,7 @@ describe('express samples', () => {
     assert.strictEqual(entries.length, 1);
     const entry = entries[0];
     // Ensure that a functional logger ws configured with the sample:
-    assert(entry.data.message);
+    assert(typeof entry.data.message === 'string');
     assert.ok(entry.metadata.trace, 'should have a trace property');
     assert.match(entry.metadata.trace, /projects\/.*\/traces\/.*/);
   });
