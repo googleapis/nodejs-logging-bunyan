@@ -51,7 +51,7 @@ describe('express samples', () => {
     assert.strictEqual(entries.length, 1);
     const entry = entries[0];
     // Ensure that a functional logger ws configured with the sample:
-    assert.strictEqual(entry.data.message);
+    assert(entry.data.message);
     assert.ok(entry.metadata.trace, 'should have a trace property');
     assert.match(entry.metadata.trace, /projects\/.*\/traces\/.*/);
   });
