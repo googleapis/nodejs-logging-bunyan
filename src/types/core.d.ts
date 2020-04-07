@@ -177,7 +177,7 @@ export interface HttpRequest {
   remoteIp?: string;
   serverIp?: string;
   referer?: string;
-  latency?: {seconds: number; nanos: number};
+  latency?: string | {seconds: number; nanos: number};
   cacheLookup?: boolean;
   cacheHit?: boolean;
   cacheValidatedWithOriginServer?: boolean;
