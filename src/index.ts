@@ -21,8 +21,13 @@ import * as express from './middleware/express';
 export {express};
 
 import {Logging, detectServiceContext} from '@google-cloud/logging';
+import {trace} from '@opentelemetry/api';
 
 import * as types from './types/core';
+
+const tracer = trace.getTracer('tracestream');
+
+const googleProjectId = process.env.GOOGLE_PROJECT_ID;
 
 // Map of Stackdriver logging levels.
 const BUNYAN_TO_STACKDRIVER: Map<number, string> = new Map([
@@ -46,7 +51,7 @@ export const LOGGING_TRACE_KEY = 'logging.googleapis.com/trace';
  * @google-cloud/trace-agent library in the LogEntry.trace field format of:
  * "projects/[PROJECT-ID]/traces/[TRACE-ID]".
  */
-function getCurrentTraceFromAgent() {
+function getCurrentTraceFromGoogleCloudAgent() {
   const agent = global._google_trace_agent;
   if (!agent || !agent.getCurrentContextId || !agent.getWriterProjectId) {
     return null;
@@ -63,6 +68,39 @@ function getCurrentTraceFromAgent() {
   }
 
   return `projects/${traceProjectId}/traces/${traceId}`;
+}
+
+/**
+ * Gets the current fully qualified trace ID when available from the
+ * @opentelemetry library in the LogEntry.trace field format of:
+ * "projects/[PROJECT-ID]/traces/[TRACE-ID]".
+ */
+function getCurrentTraceFromOpenTelemetryAgent() {
+  const span = tracer.getCurrentSpan();
+  if (!span) {
+    return null;
+  }
+
+  const {traceId} = span.context();
+
+  if (!googleProjectId) {
+    return null;
+  }
+
+  return `projects/${googleProjectId}/traces/${traceId}`;
+}
+
+/**
+ * Gets the current fully qualified trace ID when available from the
+ * @google-cloud/trace-agent or @opentelemetry library in the LogEntry.trace
+ * field format of: "projects/[PROJECT-ID]/traces/[TRACE-ID]".
+ */
+function getCurrentTraceFromAgent(opentelemetry: boolean) {
+  if (opentelemetry) {
+    return getCurrentTraceFromOpenTelemetryAgent();
+  } else {
+    return getCurrentTraceFromGoogleCloudAgent();
+  }
 }
 
 /**
@@ -139,12 +177,14 @@ export class LoggingBunyan extends Writable {
   private logName: string;
   private resource: types.MonitoredResource | undefined;
   private serviceContext?: types.ServiceContext;
+  private opentelemetry: boolean;
   stackdriverLog: types.StackdriverLog; // TODO: add type for @google-cloud/logging
   constructor(options?: types.Options) {
     options = options || {};
     super({objectMode: true});
     this.logName = options.logName || 'bunyan_log';
     this.resource = options.resource;
+    this.opentelemetry = options.opentelemetry || false;
     this.serviceContext = options.serviceContext;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.stackdriverLog = new Logging(options as any).log(this.logName, {
@@ -295,7 +335,7 @@ export class LoggingBunyan extends Writable {
     }
     record = Object.assign({}, record);
     if (!record[LOGGING_TRACE_KEY]) {
-      const trace = getCurrentTraceFromAgent();
+      const trace = getCurrentTraceFromAgent(this.opentelemetry);
       if (trace) {
         record[LOGGING_TRACE_KEY] = trace;
       }

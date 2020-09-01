@@ -78,6 +78,10 @@ export interface Options {
   apiEndpoint?: string;
   // An attempt will be made to truncate messages larger than maxEntrySize.
   maxEntrySize?: number;
+  /**
+   * Should the current trace context be pulled from open telemetry.
+   */
+  opentelemetry?: boolean;
 }
 
 export interface MonitoredResource {

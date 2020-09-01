@@ -41,6 +41,7 @@ describe('logging-bunyan', () => {
   let fakeLogOptions_: types.Options;
   let fakeWritableOptions_: types.Options;
   let fakeDetectedServiceContext: types.ServiceContext | null;
+  let fakeSpan: {context: () => {traceId: string}} | null;
 
   function fakeLogging(options: types.Options) {
     fakeLoggingOptions_ = options;
@@ -79,10 +80,18 @@ describe('logging-bunyan', () => {
     }
     return Promise.resolve(fakeDetectedServiceContext);
   };
+  process.env.GOOGLE_PROJECT_ID = 'project1';
   const loggingBunyanLib = proxyquire('../src/index.js', {
     '@google-cloud/logging': {
       Logging: fakeLogging,
       detectServiceContext: fakeDetectServiceContext,
+    },
+    '@opentelemetry/api': {
+      trace: {
+        getTracer: () => ({
+          getCurrentSpan: () => fakeSpan,
+        }),
+      },
     },
     stream: fakeStream,
   });
@@ -90,6 +99,13 @@ describe('logging-bunyan', () => {
     '@google-cloud/logging': {
       Logging: fakeLogging,
       detectServiceContext: fakeDetectServiceContext,
+    },
+    '@opentelemetry/api': {
+      trace: {
+        getTracer: () => ({
+          getCurrentSpan: () => fakeSpan,
+        }),
+      },
     },
     stream: fakeStream,
   });
@@ -428,6 +444,68 @@ describe('logging-bunyan', () => {
       };
 
       loggingBunyan.formatEntry_(recordWithTrace);
+    });
+  });
+
+  describe('opentelemetry', () => {
+    beforeEach(() => {
+      const openTelemetryOptions = {
+        ...OPTIONS,
+        opentelemetry: true,
+      };
+      loggingBunyan = new loggingBunyanLib.LoggingBunyan(openTelemetryOptions);
+    });
+
+    it('should not set trace property if trace unavailable', done => {
+      fakeSpan = null;
+      FakeWritable.prototype.write = function (
+        // Writable.write used 'any' in function signature.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        record: any,
+        encoding: string,
+        callback: Function
+      ) {
+        assert.deepStrictEqual(record, RECORD);
+        assert.strictEqual(encoding, 'encoding');
+        assert.strictEqual(callback, assert.ifError);
+        assert.strictEqual(this, loggingBunyan);
+        done();
+      };
+
+      loggingBunyan.write(RECORD, 'encoding', assert.ifError);
+    });
+
+    it('should set prefixed trace property if trace available', done => {
+      fakeSpan = {
+        context: () => ({traceId: 'trace1'}),
+      };
+      const recordWithoutTrace = Object.assign({}, RECORD);
+      const recordWithTrace = Object.assign({}, RECORD);
+      // recordWithTrace does not have index signature.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (recordWithTrace as any)[loggingBunyanLib.LOGGING_TRACE_KEY] =
+        'projects/project1/traces/trace1';
+
+      FakeWritable.prototype.write = function (
+        // Writable.write used 'any' in function signature.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        record: any,
+        encoding: string,
+        callback: Function
+      ) {
+        // Check that trace field added to record before calling Writable.write
+        assert.deepStrictEqual(record, recordWithTrace);
+
+        // Check that the original record passed in was not mutated
+        assert.deepStrictEqual(recordWithoutTrace, RECORD);
+
+        assert.strictEqual(encoding, 'encoding');
+        assert.strictEqual(callback, assert.ifError);
+        assert.strictEqual(this, loggingBunyan);
+        done();
+      };
+
+      loggingBunyan.write(recordWithoutTrace, 'encoding', assert.ifError);
     });
   });
 
