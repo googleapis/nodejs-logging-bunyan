@@ -4,7 +4,7 @@
       "git": {
         "name": ".",
         "remote": "https://github.com/googleapis/nodejs-logging-bunyan.git",
-        "sha": "b1d94ddeb2e0ff920fb6faff06ecdfff6c56aa66"
+        "sha": "fa26e36c97b215e87277b0f8e0b3e941ea725735"
       }
     },
     {
