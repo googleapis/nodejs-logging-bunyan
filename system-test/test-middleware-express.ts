@@ -18,7 +18,6 @@
 
 import * as assert from 'assert';
 import {describe, it, before} from 'mocha';
-import delay from 'delay';
 import * as uuid from 'uuid';
 import {express as elb} from '../src/index';
 import {Logging} from '@google-cloud/logging';
@@ -28,6 +27,10 @@ const logging = new Logging();
 const WRITE_CONSISTENCY_DELAY_MS = 20 * 1000;
 const TEST_TIMEOUT = WRITE_CONSISTENCY_DELAY_MS + 10 * 1000;
 const LOG_NAME = `bunyan-system-test-${uuid.v4()}`;
+
+function delay(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 describe('express middleware', () => {
   let logger: elb.MiddlewareReturnType['logger'];

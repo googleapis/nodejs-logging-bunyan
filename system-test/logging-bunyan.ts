@@ -24,13 +24,16 @@ import {Logging} from '@google-cloud/logging';
 
 const logging = new Logging();
 import {LoggingBunyan} from '../src/index';
-import delay from 'delay';
 
 const WRITE_CONSISTENCY_DELAY_MS = 90000;
 
 const UUID = uuid.v4();
 function logName(name: string) {
   return `${UUID}_${name}`;
+}
+
+function delay(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 describe('LoggingBunyan', function () {
