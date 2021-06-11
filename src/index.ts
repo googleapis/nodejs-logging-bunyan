@@ -270,7 +270,7 @@ export class LoggingBunyan extends Writable {
       delete record[LOGGING_SPAN_KEY];
     }
 
-    if (record[LOGGING_SAMPLED_KEY]) {
+    if (LOGGING_SAMPLED_KEY in record) {
       entryMetadata.traceSampled = record[LOGGING_SAMPLED_KEY];
       delete record[LOGGING_SAMPLED_KEY];
     }
