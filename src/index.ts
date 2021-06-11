@@ -37,9 +37,23 @@ const BUNYAN_TO_STACKDRIVER: Map<number, string> = new Map([
 /**
  * Key to use in the Bunyan payload to allow users to indicate a trace for the
  * request, and to store as an intermediate value on the log entry before it
- * gets written to the Stackdriver logging API.
+ * gets written to the Cloud Logging logging API.
  */
 export const LOGGING_TRACE_KEY = 'logging.googleapis.com/trace';
+
+/**
+ * Key to use in the Bunyan payload to allow users to indicate a spanId for the
+ * request, and to store as an intermediate value on the log entry before it
+ * gets written to the Cloud logging API.
+ */
+export const LOGGING_SPAN_KEY = 'logging.googleapis.com/spanId';
+
+/**
+ * Key to use in the Bunyan payload to allow users to indicate a traceSampled
+ * flag for the request, and to store as an intermediate value on the log entry
+ * before it gets written to the Cloud logging API.
+ */
+export const LOGGING_SAMPLED_KEY = 'logging.googleapis.com/trace_sampled';
 
 /**
  * Gets the current fully qualified trace ID when available from the
@@ -251,6 +265,16 @@ export class LoggingBunyan extends Writable {
       delete record[LOGGING_TRACE_KEY];
     }
 
+    if (record[LOGGING_SPAN_KEY]) {
+      entryMetadata.spanId = record[LOGGING_SPAN_KEY];
+      delete record[LOGGING_SPAN_KEY];
+    }
+
+    if (record[LOGGING_SAMPLED_KEY]) {
+      entryMetadata.traceSampled = record[LOGGING_SAMPLED_KEY];
+      delete record[LOGGING_SAMPLED_KEY];
+    }
+
     return this.stackdriverLog.entry(entryMetadata, record);
   }
 
@@ -352,3 +376,19 @@ module.exports.BUNYAN_TO_STACKDRIVER = BUNYAN_TO_STACKDRIVER;
  * @type {string}
  */
 module.exports.LOGGING_TRACE_KEY = LOGGING_TRACE_KEY;
+
+/**
+ * Value: `logging.googleapis.com/spanId`
+ *
+ * @name LoggingBunyan.LOGGING_SPAN_KEY
+ * @type {string}
+ */
+module.exports.LOGGING_SPAN_KEY = LOGGING_SPAN_KEY;
+
+/**
+ * Value: `logging.googleapis.com/trace_sampled`
+ *
+ * @name LoggingBunyan.LOGGING_SAMPLED_KEY
+ * @type {string}
+ */
+module.exports.LOGGING_SAMPLED_KEY = LOGGING_SAMPLED_KEY;

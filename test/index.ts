@@ -412,6 +412,10 @@ describe('logging-bunyan', () => {
       // recordWithTrace does not have index signature.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (recordWithTrace as any)[loggingBunyanLib.LOGGING_TRACE_KEY] = 'trace1';
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (recordWithTrace as any)[loggingBunyanLib.LOGGING_SPAN_KEY] = 'span1';
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (recordWithTrace as any)[loggingBunyanLib.LOGGING_SAMPLED_KEY] = true;
 
       loggingBunyan.stackdriverLog.entry = (
         entryMetadata: types.StackdriverEntryMetadata,
@@ -422,6 +426,8 @@ describe('logging-bunyan', () => {
           timestamp: RECORD.time,
           severity: 'INFO',
           trace: 'trace1',
+          spanId: 'span1',
+          traceSampled: true,
         });
         assert.deepStrictEqual(record, RECORD);
         done();
