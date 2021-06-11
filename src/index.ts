@@ -60,7 +60,7 @@ export const LOGGING_SAMPLED_KEY = 'logging.googleapis.com/trace_sampled';
  * @google-cloud/trace-agent library in the LogEntry.trace field format of:
  * "projects/[PROJECT-ID]/traces/[TRACE-ID]".
  */
-function getCurrentTraceFromAgent() {
+export function getCurrentTraceFromAgent() {
   const agent = global._google_trace_agent;
   if (!agent || !agent.getCurrentContextId || !agent.getWriterProjectId) {
     return null;
