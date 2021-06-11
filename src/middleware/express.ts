@@ -20,7 +20,12 @@ import {
 import * as bunyan from 'bunyan';
 import {GCPEnv} from 'google-auth-library';
 
-import {LOGGING_TRACE_KEY, LOGGING_SPAN_KEY, LOGGING_SAMPLED_KEY, LoggingBunyan} from '../index';
+import {
+  LOGGING_TRACE_KEY,
+  LOGGING_SPAN_KEY,
+  LOGGING_SAMPLED_KEY,
+  LoggingBunyan,
+} from '../index';
 import * as types from '../types/core';
 
 export const APP_LOG_SUFFIX = 'applog';
@@ -77,8 +82,18 @@ export async function middleware(
       name: options.logName!,
       streams: [loggingBunyanReq.stream(options.level as types.LogLevel)],
     });
-    emitRequestLog = (httpRequest: HttpRequest, trace: string, span?: string, sampled?: boolean) => {
-      requestLogger.info({[LOGGING_TRACE_KEY]: trace, [LOGGING_SPAN_KEY]: span, [LOGGING_SAMPLED_KEY]: sampled, httpRequest});
+    emitRequestLog = (
+      httpRequest: HttpRequest,
+      trace: string,
+      span?: string,
+      sampled?: boolean
+    ) => {
+      requestLogger.info({
+        [LOGGING_TRACE_KEY]: trace,
+        [LOGGING_SPAN_KEY]: span,
+        [LOGGING_SAMPLED_KEY]: sampled,
+        httpRequest,
+      });
     };
   }
 
@@ -92,6 +107,9 @@ export async function middleware(
   };
 
   function makeChildLogger(trace: string, span?: string, sampled?: boolean) {
-    return logger.child({[LOGGING_TRACE_KEY]: trace, [LOGGING_SPAN_KEY]: span}, true /* simple child */);
+    return logger.child(
+      {[LOGGING_TRACE_KEY]: trace, [LOGGING_SPAN_KEY]: span},
+      true /* simple child */
+    );
   }
 }
