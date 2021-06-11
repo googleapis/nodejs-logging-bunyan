@@ -442,8 +442,8 @@ describe('logging-bunyan', () => {
       (recordWithTrace as any)[loggingBunyanLib.LOGGING_SAMPLED_KEY] = false;
 
       loggingBunyan.stackdriverLog.entry = (
-          entryMetadata: types.StackdriverEntryMetadata,
-          record: string | types.BunyanLogRecord
+        entryMetadata: types.StackdriverEntryMetadata,
+        record: string | types.BunyanLogRecord
       ) => {
         assert.deepStrictEqual(entryMetadata, {
           resource: loggingBunyan.resource,
