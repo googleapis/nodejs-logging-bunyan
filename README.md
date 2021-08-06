@@ -144,7 +144,7 @@ startServer();
 
 ### Error Reporting
 
-Any `Error` objects you log at severity `error` or higher can automatically be picked up by [Cloud Error Reporting][error-reporting] if you have specified a `serviceContext.service` when instantiating a `LoggingBunyan` instance:
+Any `Error` objects you log at severity `error` or higher can automatically be picked up by [Cloud Error Reporting][error-reporting] if you have specified a `serviceContext.service` when instatiating a `LoggingBunyan` instance:
 
 ```javascript
 const loggingBunyan = new LoggingBunyan({
