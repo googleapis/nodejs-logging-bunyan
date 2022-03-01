@@ -215,6 +215,30 @@ logger.info({
 }, 'Bunyan log entry with custom trace field');
 ```
 
+<<<<<<< HEAD
+=======
+### Error handling with a default callback
+The `LoggingBunyan` class creates an instance of `Logging` which creates the `Log` class from `@google-cloud/logging` package to write log entries. 
+The `Log` class writes logs asynchronously and there are cases when log entries cannot be written and an error is 
+thrown.  If the error is not handled properly, it could crash the application. One possible way to handle the error is to provide a default callback
+to the `LoggingBunyan` constructor which will be used to initialize the `Log` object with that callback like in the example below:
+
+```js
+// Imports the Google Cloud client library for Bunyan
+const {LoggingBunyan} = require('@google-cloud/logging-bunyan');
+// Creates a client
+const loggingBunyan = new LoggingBunyan({
+  projectId: 'your-project-id',
+  keyFilename: '/path/to/key.json',
+  defaultCallback: err => {
+      if (err) {
+      console.log('Error occured: ' + err);
+      }
+  },
+});
+```
+
+>>>>>>> b8cf706e4ffe071054656f3b1933d8a6191601a1
 
 ## Samples
 
