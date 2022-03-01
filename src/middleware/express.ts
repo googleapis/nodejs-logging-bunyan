@@ -106,6 +106,7 @@ export async function middleware(
     ),
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function makeChildLogger(trace: string, span?: string, sampled?: boolean) {
     return logger.child(
       {[LOGGING_TRACE_KEY]: trace, [LOGGING_SPAN_KEY]: span},
