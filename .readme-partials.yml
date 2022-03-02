@@ -135,8 +135,8 @@ body: |-
 
   ### Error handling with a default callback
   The `LoggingBunyan` class creates an instance of `Logging` which creates the `Log` class from `@google-cloud/logging` package to write log entries. 
-  The `Log` class writes logs asynchronously and there are cases when log entries cannot be written and an error is 
-  thrown.  If the error is not handled properly, it could crash the application. One possible way to handle the error is to provide a default callback
+  The `Log` class writes logs asynchronously and there are cases when log entries cannot be written when it fails or an error is returned from Logging backend.
+  If the error is not handled, it could crash the application. One possible way to handle the error is to provide a default callback
   to the `LoggingBunyan` constructor which will be used to initialize the `Log` object with that callback like in the example below:
 
   ```js
