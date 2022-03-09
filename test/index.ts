@@ -644,6 +644,28 @@ describe('logging-bunyan', () => {
 
       loggingBunyan._write(RECORD, '', done);
     });
+
+    it('should write the record and call default callback', done => {
+      let isCallbackCalled = false;
+      loggingBunyan.stackdriverLog.entry = () => {
+        return {};
+      };
+      loggingBunyan.defaultCallback = () => {
+        isCallbackCalled = true;
+      };
+      loggingBunyan.stackdriverLog.write =
+        // Writable.write used 'any' in function signature.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (entries: any, callback: Function) => {
+          callback();
+        };
+
+      loggingBunyan._write(RECORD, '', () => {
+        throw Error('Should never be called!');
+      });
+      assert.strictEqual(isCallbackCalled, true);
+      done();
+    });
   });
 
   describe('_writev', () => {
