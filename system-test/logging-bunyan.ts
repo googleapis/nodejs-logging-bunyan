@@ -28,7 +28,7 @@ import delay from 'delay';
 import * as instrumentation from '@google-cloud/logging/build/src/utils/instrumentation';
 
 const WRITE_CONSISTENCY_DELAY_MS = 90000;
-const MESSAGE = "Diagnostic test";
+const MESSAGE = 'Diagnostic test';
 
 const UUID = uuid.v4();
 function logName(name: string) {
@@ -57,7 +57,7 @@ describe('LoggingBunyan', function () {
     assert.ok(loggingBunyan.cloudLog instanceof LogSync);
   });
 
-  it('should write diagnostic entry', async function () {
+  it('should write diagnostic entry', async () => {
     instrumentation.setInstrumentationStatus(false);
     const start = Date.now();
     logger.info(MESSAGE);
@@ -72,22 +72,21 @@ describe('LoggingBunyan', function () {
       assert.ok(entry.data);
       if (
         Object.prototype.hasOwnProperty.call(
-          (entry.data as any),
+          entry.data as any,
           instrumentation.DIAGNOSTIC_INFO_KEY
         )
       ) {
-        const info =
-          (entry.data as any)[instrumentation.DIAGNOSTIC_INFO_KEY][
-            instrumentation.INSTRUMENTATION_SOURCE_KEY
-          ];
+        const info = (entry.data as any)[instrumentation.DIAGNOSTIC_INFO_KEY][
+          instrumentation.INSTRUMENTATION_SOURCE_KEY
+        ];
         assert.equal(info[0].name, 'nodejs');
         assert.equal(info[1].name, 'nodejs-bunyan');
       } else {
         const data = entry.data as {message: string};
         assert.ok(data.message.includes(MESSAGE));
       }
-    });    
-  });  
+    });
+  });
 
   it('should properly write log entries', async function () {
     this.retries(3);
