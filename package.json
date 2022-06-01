@@ -51,7 +51,6 @@
     "precompile": "gts clean"
   },
   "dependencies": {
-    "arrify": "^2.0.1",
     "@google-cloud/logging": "^10.0.2",
     "google-auth-library": "^8.0.2"
   },

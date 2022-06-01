@@ -21,7 +21,6 @@ import {
   createDiagnosticEntry,
 } from '@google-cloud/logging/build/src/utils/instrumentation';
 import path = require('path');
-import arrify = require('arrify');
 
 // Export the express middleware as 'express'.
 export {express};
@@ -436,7 +435,8 @@ export class LoggingBunyan extends Writable {
    */
   _writeCall(entries: Entry | Entry[], callback: Function) {
     // First create instrumentation record if it is never written before
-    if (!setInstrumentationStatus(true)) {
+    const alreadyWritten = setInstrumentationStatus(true);
+    if (!alreadyWritten) {
       let instrumentationEntry = createDiagnosticEntry(
         'nodejs-bunyan',
         this.getNodejsLibraryVersion()
@@ -449,7 +449,7 @@ export class LoggingBunyan extends Writable {
           ? (this.cloudLog as LogSync)
           : (this.cloudLog as Log)
       ).entry(instrumentationEntry.metadata, instrumentationEntry.data);
-      entries = arrify(entries);
+      entries = Array.isArray(entries) ? entries : [entries];
       entries.push(instrumentationEntry);
     }
     if (this.redirectToStdout) {

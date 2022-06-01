@@ -68,6 +68,7 @@ describe('LoggingBunyan', function () {
       WRITE_CONSISTENCY_DELAY_MS
     );
     assert.strictEqual(entries.length, 2);
+    let isDiagnosticPresent = false;
     entries.forEach(entry => {
       assert.ok(entry.data);
       if (
@@ -81,12 +82,16 @@ describe('LoggingBunyan', function () {
           instrumentation.INSTRUMENTATION_SOURCE_KEY
         ];
         assert.equal(info[0].name, 'nodejs');
+        assert.ok(info[0].version.includes('.'));
         assert.equal(info[1].name, 'nodejs-bunyan');
+        assert.ok(info[1].version.includes('.'));
+        isDiagnosticPresent = true;
       } else {
         const data = entry.data as {message: string};
         assert.ok(data.message.includes(MESSAGE));
       }
     });
+    assert.ok(isDiagnosticPresent);
   });
 
   it('should properly write log entries', async function () {
