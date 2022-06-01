@@ -25,8 +25,10 @@ import {Logging, LogSync} from '@google-cloud/logging';
 const logging = new Logging();
 import {LoggingBunyan} from '../src/index';
 import delay from 'delay';
+import * as instrumentation from '@google-cloud/logging/build/src/utils/instrumentation';
 
 const WRITE_CONSISTENCY_DELAY_MS = 90000;
+const MESSAGE = "Diagnostic test";
 
 const UUID = uuid.v4();
 function logName(name: string) {
@@ -54,6 +56,38 @@ describe('LoggingBunyan', function () {
     });
     assert.ok(loggingBunyan.cloudLog instanceof LogSync);
   });
+
+  it('should write diagnostic entry', async function () {
+    instrumentation.setInstrumentationStatus(false);
+    const start = Date.now();
+    logger.info(MESSAGE);
+    const entries = await pollLogs(
+      LOG_NAME,
+      start,
+      2,
+      WRITE_CONSISTENCY_DELAY_MS
+    );
+    assert.strictEqual(entries.length, 2);
+    entries.forEach(entry => {
+      assert.ok(entry.data);
+      if (
+        Object.prototype.hasOwnProperty.call(
+          (entry.data as any),
+          instrumentation.DIAGNOSTIC_INFO_KEY
+        )
+      ) {
+        const info =
+          (entry.data as any)[instrumentation.DIAGNOSTIC_INFO_KEY][
+            instrumentation.INSTRUMENTATION_SOURCE_KEY
+          ];
+        assert.equal(info[0].name, 'nodejs');
+        assert.equal(info[1].name, 'nodejs-bunyan');
+      } else {
+        const data = entry.data as {message: string};
+        assert.ok(data.message.includes(MESSAGE));
+      }
+    });    
+  });  
 
   it('should properly write log entries', async function () {
     this.retries(3);
@@ -202,6 +236,7 @@ describe('LoggingBunyan', function () {
       );
       const errEvent = errors[0];
 
+      console.log(`The entries are: ${JSON.stringify(errEvent)}`);
       assert.strictEqual(errEvent.serviceContext.service, SERVICE);
       assert(errEvent.message.startsWith(`Error: ${message}`));
     });
