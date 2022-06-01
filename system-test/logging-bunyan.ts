@@ -236,7 +236,6 @@ describe('LoggingBunyan', function () {
       );
       const errEvent = errors[0];
 
-      console.log(`The entries are: ${JSON.stringify(errEvent)}`);
       assert.strictEqual(errEvent.serviceContext.service, SERVICE);
       assert(errEvent.message.startsWith(`Error: ${message}`));
     });
