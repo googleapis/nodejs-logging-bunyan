@@ -18,6 +18,7 @@ import {
   middleware as commonMiddleware,
 } from '@google-cloud/logging';
 import * as bunyan from 'bunyan';
+import type * as Logger from 'bunyan';
 import {GCPEnv} from 'google-auth-library';
 
 import {
@@ -29,10 +30,6 @@ import {
 import * as types from '../types/core';
 
 export const APP_LOG_SUFFIX = 'applog';
-
-// @types/bunyan doesn't export Logger. Access it via ReturnType on
-// createLogger.
-export type Logger = ReturnType<typeof bunyan.createLogger>;
 
 export interface MiddlewareOptions extends types.Options {
   level?: types.LogLevel;
