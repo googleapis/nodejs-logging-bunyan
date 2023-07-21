@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "@google-cloud/logging": "^10.2.2",
-    "google-auth-library": "^8.0.2"
+    "google-auth-library": "^9.0.0"
   },
   "devDependencies": {
     "@google-cloud/common": "^4.0.0",
