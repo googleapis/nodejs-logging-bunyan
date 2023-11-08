@@ -143,7 +143,7 @@ startServer();
 
 ### Error Reporting
 
-Any `Error` objects you log at severity `error` or higher can automatically be picked up by [Cloud Error Reporting][error-reporting] if you have specified a `serviceContext.service` when instantiating a `LoggingBunyan` instance:
+Any `Error` objects you log at severity `error` or higher can automatically be picked up by [Cloud Error Reporting](https://cloud.google.com/error-reporting/) if you have specified a `serviceContext.service` when instantiating a `LoggingBunyan` instance:
 
 ```javascript
 const loggingBunyan = new LoggingBunyan({
@@ -158,7 +158,7 @@ const loggingBunyan = new LoggingBunyan({
 
 It is an error to specify a `serviceContext` but not specify `serviceContext.service`.
 
-Make sure to add logs to your [uncaught exception][uncaught] and [unhandled rejection][unhandled] handlers if you want to see those errors too.
+Make sure to add logs to your [uncaught exception](https://nodejs.org/api/process.html#process_event_uncaughtexception) and [unhandled rejection](https://nodejs.org/api/process.html#process_event_unhandledrejection) handlers if you want to see those errors too.
 
 You may also want to see the [@google-cloud/error-reporting][@google-cloud/error-reporting] module which provides direct access to the Error Reporting API.
 

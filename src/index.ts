@@ -115,7 +115,7 @@ export function getCurrentTraceFromAgent() {
  *     resource. For more information, see the
  *     [official documentation]{@link
  * https://cloud.google.com/monitoring/api/ref_v3/rpc/google.api#google.api.MonitoredResource}
- * 
+ *
  * @param {object} [options.serviceContext] For logged errors, we provide this
  *     as the service context. For more information see
  *     [this guide]{@link
