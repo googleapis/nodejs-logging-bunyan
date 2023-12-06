@@ -153,10 +153,13 @@ describe('logging-bunyan', () => {
       assert.strictEqual(fakeLoggingOptions_, OPTIONS);
       assert.strictEqual(fakeLogName_, OPTIONS.logName);
     });
-    
+
     it('should localize Log instance using provided jsonFieldsToTruncate in options', () => {
       assert.strictEqual(fakeLoggingOptions_, OPTIONS);
-      assert.strictEqual(fakeLogOptions_.jsonFieldsToTruncate, OPTIONS.jsonFieldsToTruncate);
+      assert.strictEqual(
+        fakeLogOptions_.jsonFieldsToTruncate,
+        OPTIONS.jsonFieldsToTruncate
+      );
     });
 
     it('should localize Log instance using default name, removeCircular and maxEntrySize options', () => {
