@@ -34,6 +34,8 @@ import {
 
 import * as types from './types/core';
 
+export type {types};
+
 import {ApiResponseCallback} from '@google-cloud/logging/build/src/log';
 import {LogSeverityFunctions} from '@google-cloud/logging/build/src/utils/log-common';
 import {LogSyncOptions} from '@google-cloud/logging/build/src/log-sync';
